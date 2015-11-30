@@ -1,0 +1,28 @@
+extends layout
+
+block content
+  if (user)
+    header(role='banner')
+      hgroup
+        h1
+            a(href='/'): img(src='/images/logo.jpg')
+            <strong>A4 CRUD App</strong>
+    .container
+      h1 Edit Profile
+      p.lead Fill in your information! 
+      form(role='form', action="/edit", method="post", style='max-width: 300px;')
+        lead New Email:    
+        .form-group
+          input.form-control(type='text', name="username", value= user.username, placeholder=user.username)
+        lead New Display Name:    
+        .form-group
+          input.form-control(type='text', name="displayname", value=user.displayname, placeholder=user.displayname)
+        lead New Profile Description:  
+        .form-group
+          input.form-control(type='description', name="description", value= user.description, placeholder=user.description)
+        button.btn.btn-default(type='submit') Submit
+        &nbsp;
+        a(href='/')
+          button.btn.btn-primary(type="button") Cancel
+  if (!user)
+    Unauthorized

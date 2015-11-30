@@ -1,0 +1,24 @@
+extends layout
+
+block content
+  header(role='banner')
+    hgroup
+        h1
+            a(href='/'): img(src='/images/logo.jpg')    
+            <strong>A4 CRUD App</strong>
+        if(info)
+            if (!info.displayname)
+                h2 #{info.username}'s Profile
+            if (info.displayname)    
+                h2 #{info.displayname}'s Profile
+    if(info.avatar)   
+        a(href='/upload'): img(src='/images/' + info.avatar, height='100', width='100') 
+    else
+        a(href='/upload'): img(src='/images/default.jpg', height='100', width='100')             
+    br
+    br
+    p Email: #{info.username}
+    p Display Name: #{info.displayname}  
+    p Description: #{info.description} 
+    a(href='/profiles') 
+        p Back              

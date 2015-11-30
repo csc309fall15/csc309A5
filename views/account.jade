@@ -1,0 +1,40 @@
+extends layout
+
+block content
+  header(role='banner')
+    hgroup
+        h1
+            a(href='/'): img(src='/images/logo.jpg')    
+            <strong>A4 CRUD App</strong>
+  if (info)        
+  h1 Edit Profile
+  p.lead Change Profile Information 
+      form(role='form', action="/upload",method="post", enctype="multipart/form-data", style='max-width: 300px;')
+        lead Change Profile Image:
+        .form-group
+          input.form-control(type='file', name='displayImage')
+      button.btn.btn-default(type='submit') Submit    
+      form(role='form', action="/account",method="post", style='max-width: 300px;')
+        lead Change Email:    
+        .form-group
+          input.form-control(type='text', name="username", value=info.username)
+        lead Change Display Name:    
+        .form-group
+          input.form-control(type='text', name="displayname", value=info.displayname)
+        lead Change Profile Description:  
+        .form-group
+          input.form-control(type='description', name="description", value=info.description)
+        .form-group
+          lead Admin
+          input.form-control(type="checkbox", name="sys", value="1", checked= info.sys || info.super)
+        if(user.super)         
+          .form-group
+            lead Super Admin
+            input.form-control(type="checkbox", name="super", value="1", checked= info.super)
+        .form-group
+          lead Delete User
+          input.form-control(type="checkbox", name="delete", value="1") 
+        button.btn.btn-default(type='submit') Submit
+        &nbsp;
+        a(href='/admin')
+          button.btn.btn-primary(type="button") Cancel   

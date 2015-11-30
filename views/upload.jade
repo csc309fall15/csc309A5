@@ -1,0 +1,17 @@
+extends layout
+
+block content
+  if (user)
+    header(role='banner')
+      hgroup
+        h1
+            a(href='/'): img(src='/images/logo.jpg')
+            <strong>A4 CRUD App</strong>
+    .container
+      h1 Upload Profile Picture       
+      form(role='form', action="/upload",method="post", enctype="multipart/form-data", style='max-width: 300px;')
+        .form-group
+          input.form-control(type='file', name='displayImage')
+        br
+        a(href='/')
+        button.btn.btn-default(type='submit') Submit

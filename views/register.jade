@@ -1,0 +1,25 @@
+extends layout
+
+block content
+  header(role='banner')
+    hgroup
+        h1
+          img(src='/images/logo.jpg') 
+          <strong>A4 CRUD App</strong>
+  .container
+    h1 Register Page
+    p.lead Fill in your information! 
+    br
+    form(role='form', action="/register",method="post", style='max-width: 300px;')
+      .form-group
+          input.form-control(type='text', name="username", placeholder='Enter E-Mail Address')
+      .form-group
+        input.form-control(type='text', name="displayname", placeholder='Enter Display Name')
+      .form-group
+        input.form-control(type='password', name="password", placeholder='Enter Password')
+      button.btn.btn-default(type='submit') Submit
+      &nbsp;
+      a(href='/')
+        button.btn.btn-primary(type="button") Cancel
+    br
+    h4= info

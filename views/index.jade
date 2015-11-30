@@ -1,0 +1,41 @@
+extends layout
+
+block content
+  header(role='banner')
+    hgroup
+        h1
+            a(href='/'): img(src='/images/logo.jpg')    
+            <strong>A4 CRUD App</strong>
+        if(user)
+            if (!user.displayname)
+                h2 Welcome 
+                    a(href='/edit') #{user.username}!
+            if (user.displayname)    
+                h2 Welcome 
+                    a(href='/edit') #{user.displayname}!              
+  br    
+  if (!user)
+    a(href="/login") Login
+    br
+    a(href="/register") Register
+  if (user)
+    a(href="/logout") Logout
+    br   
+    if (user.sys)
+        a(href='/admin') Admin Tools 
+    br
+    br
+    if(user.avatar)   
+        a(href='/upload'): img(src='/images/' + user.avatar, height='100', width='100') 
+    else
+        a(href='/upload'): img(src='/images/default.jpg', height='100', width='100')             
+    br
+    br
+    p Email: #{user.username}
+    p Display Name: #{user.displayname}  
+    p Description: #{user.description}
+    a(href="/edit") Edit Profile
+    br
+    h3 
+        a(href='/profiles') 
+            p View All Users

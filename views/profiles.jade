@@ -1,0 +1,22 @@
+extends layout
+
+block content
+  header(role='banner')
+    hgroup
+        h1
+            a(href='/'): img(src='/images/logo.jpg')    
+            <strong>A4 CRUD App</strong>
+        if(user)
+            if (!user.displayname)
+                h2 Welcome #{user.username}!
+            if (user.displayname)    
+                h2 Welcome #{user.displayname}!
+  h2 Accounts
+  ul
+    each val in accounts
+      form(action='/profiles', method='post')
+        lead #{val.username}, #{val.displayname}
+        br
+        button(name='_id', value=val._id) View Profile
+      br
+  br
