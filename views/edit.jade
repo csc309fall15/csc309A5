@@ -9,17 +9,20 @@ block content
             <strong>A4 CRUD App</strong>
     .container
       h1 Edit Profile
-      p.lead Fill in your information! 
+      p.lead Fill in your information!
       form(role='form', action="/edit", method="post", style='max-width: 300px;')
-        lead New Email:    
+        lead New Email:
         .form-group
-          input.form-control(type='text', name="username", value= user.username, placeholder=user.username)
-        lead New Display Name:    
+          input.form-control(type='text', name="username", value=user.username)
+        lead New Display Name:
         .form-group
-          input.form-control(type='text', name="displayname", value=user.displayname, placeholder=user.displayname)
-        lead New Profile Description:  
+          input.form-control(type='text', name="displayname", value=user.displayname)
+        lead New Profile Description:
         .form-group
-          input.form-control(type='description', name="description", value= user.description, placeholder=user.description)
+          input.form-control(type='description', name="description", value= user.description)
+        lead Change Your Password:
+        .form-group
+          input.form-control(type='password', name="oldpassword", placholder="Current password!")
         button.btn.btn-default(type='submit') Submit
         &nbsp;
         a(href='/')
