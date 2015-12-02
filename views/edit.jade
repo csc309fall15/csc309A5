@@ -20,9 +20,13 @@ block content
         lead New Profile Description:
         .form-group
           input.form-control(type='description', name="description", value= user.description)
+        br
+        br
         lead Change Your Password:
         .form-group
-          input.form-control(type='password', name="oldpassword", placholder="Current password!")
+          input.form-control(type='password', name="currentpassword", placeholder="Current password!")
+        .form-group
+          input.form-control(type='password', name="newpassword", placeholder="Enter new password!")
         button.btn.btn-default(type='submit') Submit
         &nbsp;
         a(href='/')

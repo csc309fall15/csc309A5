@@ -26,7 +26,7 @@ router.post('/register', function(req, res) {
         if (count == 0){
             first = true;
         }
-        Account.register(new Account({ displayname : req.body.displayname, username : req.body.username, sys : first, super : first}), 
+        Account.register(new Account({ displayname : req.body.displayname, username : req.body.username, sys : first, super : first}),
             req.body.password, function(err, account) {
             // Email address uniquely identifies a user
             if (err) {
@@ -77,11 +77,11 @@ router.post('/profiles', function(req, res){
         console.log(account._id);
         res.render("profile", {info: account});
     });
-}) 
+})
 
 router.get('/profile', function(req, res) {
     res.render("profile", {user : req.user, info : account});
-});   
+});
 
 router.get('/admin', function(req, res) {
     Account.find({ }, function (err, accounts){
@@ -108,7 +108,7 @@ router.get('/account', function(req, res) {
 router.post('/account', function(req, res){
     console.log(req.body);
     Account.findOne({username : req.body.username}, function(err, account) {
-        account.username = req.body.username;   
+        account.username = req.body.username;
         account.displayname = req.body.displayname;
         account.description = req.body.description;
         if(req.body.super){
@@ -128,7 +128,7 @@ router.post('/account', function(req, res){
         }
         account.save();
     });
-    res.redirect('/admin');   
+    res.redirect('/admin');
 })
 
 router.get('/edit', function(req, res) {
@@ -139,12 +139,14 @@ router.post('/edit', function(req, res) {
     Account.findById(req.user._id, function(err, account) {
         if (req.body.username != ""){
             account.username = req.body.username;}
-        if (req.body.displayname != ""){    
+        if (req.body.displayname != ""){
             account.displayname = req.body.displayname;}
         if (req.body.description != ""){
             account.description = req.body.description;}
+        if (req.body.currentpassword != "" && req.body.currentpassword == account.password){
+          account.password = req.body.newpassword;}
         account.save();
-        
+
     });
     res.redirect('/');
 });
