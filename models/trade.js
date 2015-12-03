@@ -12,6 +12,6 @@ var Trade = new Schema({
     beenReq: Boolean
 });
 
-Account.plugin(passportLocalMongoose);
+Trade.plugin(passportLocalMongoose);
 
 module.exports = mongoose.model('Trade', Trade);

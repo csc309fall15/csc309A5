@@ -7,13 +7,17 @@ block content
         a(href='/'): img(src='/images/logo.jpg')    
         <strong>A4 CRUD App</strong>
   p Trade From
-  form#formEditProfile(name="editprofile",method="post",action="/editself2")
+  form#formSubmitTrade(name="submittrade",method="post",action="/trade")
     p Title of Trade:
     input#inputTradeTitle(type="text", placeholder="", name="tradetitle")
+    br
     p Item(s) Up for Trading:
     input#inputTradeItems(type="text", placeholder="", name="tradeitems")
+    br
     p Item(s) Requesting:
     input#inputTradeReq(type="text", placeholder="", name="tradereq")
+    br
     p Trade Description:
-    input#inputTradeDesc(type="text", placeholder="", name="tradedesc")         
+    input#inputTradeDesc(type="text", placeholder="", name="tradedesc")
+    br     
     button#btnSubmit(type="submit") Submit

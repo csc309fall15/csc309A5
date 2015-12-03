@@ -1,6 +1,7 @@
 var express = require('express');
 var passport = require('passport');
 var Account = require('../models/account');
+var Trade = require('../models/trade');
 var router = express.Router();
 
 var app = express();
@@ -168,5 +169,16 @@ router.post('/upload', upload.single('displayImage'), function(req, res){
 router.get('/ping', function(req, res){
     res.status(200).send("pong!");
 });
+
+router.get('/trade', function(req, res) {
+    res.render('trade');
+});
+
+/*
+router.post('/trade', function(req, res) {
+    Trade.register(new Trade({title : req.body.tradetitle, desc : req.body.tradedesc, itemReq : req.body.tradereq, itemGive : req.body.tradeitems, date : Date.now(), beenReq : false, userID : 12}));
+    res.redirect('/trade');
+});
+*/
 
 module.exports = router;
