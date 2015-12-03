@@ -5,10 +5,11 @@ var passportLocalMongoose = require('passport-local-mongoose');
 var Trade = new Schema({
     title: String,
     desc: String,
-    request: String,
+    itemReq: String,
+    itemGive: String,
     userID: String,
     date: String,
-    flag: Boolean
+    beenReq: Boolean
 });
 
 Account.plugin(passportLocalMongoose);

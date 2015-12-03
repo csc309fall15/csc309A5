@@ -1,0 +1,19 @@
+extends layout
+
+block content
+  header(role='banner')
+    hgroup
+      h1
+        a(href='/'): img(src='/images/logo.jpg')    
+        <strong>A4 CRUD App</strong>
+  p Trade From
+  form#formEditProfile(name="editprofile",method="post",action="/editself2")
+    p Title of Trade:
+    input#inputTradeTitle(type="text", placeholder="", name="tradetitle")
+    p Item(s) Up for Trading:
+    input#inputTradeItems(type="text", placeholder="", name="tradeitems")
+    p Item(s) Requesting:
+    input#inputTradeReq(type="text", placeholder="", name="tradereq")
+    p Trade Description:
+    input#inputTradeDesc(type="text", placeholder="", name="tradedesc")         
+    button#btnSubmit(type="submit") Submit
