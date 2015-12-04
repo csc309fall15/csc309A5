@@ -200,5 +200,24 @@ router.post('/trade', function(req, res) {
     res.redirect('/trade');
 });
 
+router.get('/tradelist', function(req,res){
+    Trade.find({ }, function (err, trades){
+        var tradeMap = {};
+
+        trades.forEach(function(trade) {
+            tradeMap[trade._id] = trade;
+        });
+    res.render("tradelist", {user : req.user, trades: tradeMap});
+    });
+});
+
+router.post('/tradelist', function(req, res){
+    console.log(req.body._id);
+    Trade.findById(req.body._id, function(err, trade){
+        console.log(trade._id);
+        res.render("profile", {info: trade});
+    });
+})
+
 
 module.exports = router;
