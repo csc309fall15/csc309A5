@@ -2,6 +2,7 @@ var express = require('express');
 var passport = require('passport');
 var Account = require('../models/account');
 var Trade = require('../models/trade');
+var mongoose = require('mongoose');
 var router = express.Router();
 
 var app = express();
@@ -156,14 +157,19 @@ router.get('/upload', function(req, res) {
     res.render('upload', {user : req.user});
 });
 
-router.post('/upload', upload.single('displayImage'), function(req, res){
+router.post('/upload', upload.single('displayImage' || 'tradeImage'), function(req, res){
     console.log(req.file);
-    Account.findById(req.user._id, function(err, account) {
-        account.avatar = req.file.filename;
-        account.save();
-    });
-    res.redirect('/');
-
+    if(req.file != undefined) {
+        if (req.file.fieldname == 'displayImage'){
+            Account.findById(req.user._id, function(err, account) {
+                account.avatar = req.file.filename;
+                account.save();
+            }); 
+        }
+        if (req.file.fieldName == 'tradeImage'){
+        }         
+    }
+    res.redirect('/');     
 })
 
 router.get('/ping', function(req, res){
@@ -171,14 +177,17 @@ router.get('/ping', function(req, res){
 });
 
 router.get('/trade', function(req, res) {
-    res.render('trade');
+    res.render('trade', {user: req.user});
 });
 
-/*
 router.post('/trade', function(req, res) {
-    Trade.register(new Trade({title : req.body.tradetitle, desc : req.body.tradedesc, itemReq : req.body.tradereq, itemGive : req.body.tradeitems, date : Date.now(), beenReq : false, userID : 12}));
+    var Trade = mongoose.model('Trade');
+    var trade = new Trade();
+    trade.title = req.body.tradetitle;
+    trade.desc = req.body.tradedesc;
+    trade.save();
     res.redirect('/trade');
 });
-*/
+
 
 module.exports = router;
