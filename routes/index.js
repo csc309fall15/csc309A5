@@ -194,10 +194,10 @@ router.post('/maketrade', function(req, res) {
     trade.itemReq = req.body.tradereq;
     trade.itemGive = req.body.tradeitems;
     trade.userID = req.user._id;
-    trade.date = Date.now;
+    trade.date = Date.now();
     trade.beenReq = false;
     trade.save();
-    res.redirect('/maketrade');
+    res.redirect('/tradelist');
 });
 
 router.get('/tradelist', function(req,res){
