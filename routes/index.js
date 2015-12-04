@@ -215,9 +215,13 @@ router.post('/tradelist', function(req, res){
     console.log(req.body._id);
     Trade.findById(req.body._id, function(err, trade){
         console.log(trade._id);
-        res.render("profile", {info: trade});
+        res.render("trade", {info: trade});
     });
-})
+});
+
+router.get('/trade', function(req, res) {
+    res.render("trade", {user : req.user, info : trade});
+});
 
 
 module.exports = router;
