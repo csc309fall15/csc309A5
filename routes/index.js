@@ -176,11 +176,11 @@ router.get('/ping', function(req, res){
     res.status(200).send("pong!");
 });
 
-router.get('/trade', function(req, res) {
-    res.render('trade', {user: req.user});
+router.get('/maketrade', function(req, res) {
+    res.render('maketrade', {user: req.user});
 });
 
-router.post('/trade', function(req, res) {
+router.post('/maketrade', function(req, res) {
     Trade.count({}, function(err, count){
         if (count == 0){
             var trade = new Trade();
@@ -197,7 +197,7 @@ router.post('/trade', function(req, res) {
     trade.date = Date.now;
     trade.beenReq = false;
     trade.save();
-    res.redirect('/trade');
+    res.redirect('/maketrade');
 });
 
 router.get('/tradelist', function(req,res){
