@@ -181,10 +181,21 @@ router.get('/trade', function(req, res) {
 });
 
 router.post('/trade', function(req, res) {
-    var Trade = mongoose.model('Trade');
+    Trade.count({}, function(err, count){
+        if (count == 0){
+            var trade = new Trade();
+            trade.title = 'test';
+            Trade.remove();
+        }
+    });
     var trade = new Trade();
     trade.title = req.body.tradetitle;
     trade.desc = req.body.tradedesc;
+    trade.itemReq = req.body.tradereq;
+    trade.itemGive = req.body.tradeitems;
+    trade.userID = req.user._id;
+    trade.date = Date.now;
+    trade.beenReq = false;
     trade.save();
     res.redirect('/trade');
 });
