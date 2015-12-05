@@ -214,7 +214,7 @@ router.post('/edit', function(req, res) {
             }
 
             if (req.body.newpassword != req.body.newpassword2) {
-              return res.render("edit", {info: "Sorry, passwords don't match."});
+              return res.render("edit", {info: "Sorry, passwords don't match.", user: account});
             }
 
             account.save();
