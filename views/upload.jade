@@ -8,9 +8,18 @@ block content
             a(href='/'): img(src='/images/logo.jpg')
             <strong>A4 CRUD App</strong>
     .container
-      h1 Upload Profile Picture       
-      form(role='form', action="/upload",method="post", enctype="multipart/form-data", style='max-width: 300px;')
-        .form-group
-          input.form-control(type='file', name='displayImage')
-        br
-        button.btn.btn-default(type='submit') Submit
+      if (trade)
+        h1 Upload Trade Picture       
+        form(role='form', action="/upload",method="post", enctype="multipart/form-data", style='max-width: 300px;')
+          .form-group
+            input.form-control(type='file', name='image')
+            input(type='hidden', name='tradeID', value=trade)
+          br
+          button.btn.btn-default(type='submit') Submit
+      else
+        h1 Upload Profile Picture       
+        form(role='form', action="/upload",method="post", enctype="multipart/form-data", style='max-width: 300px;')
+          .form-group
+            input.form-control(type='file', name='image')
+          br
+          button.btn.btn-default(type='submit') Submit

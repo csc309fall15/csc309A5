@@ -230,20 +230,26 @@ router.get('/upload', function(req, res) {
     res.render('upload', {user : req.user});
 });
 
-router.post('/upload', upload.single('displayImage' || 'tradeImage'), function(req, res) {
+router.post('/upload', upload.single('image'), function(req, res) {
     console.log(req.file);
     if(req.file != undefined) {
-        if (req.file.fieldname == 'displayImage') {
+        if (!req.body.tradeID) {
             Account.findById(req.user._id, function(err, account) {
                 account.avatar = req.file.filename;
                 account.save();
                 res.redirect('/');
             });
+        } else {
+            Trade.findById(req.body.tradeID, function (err, trade) {
+                trade.pic = req.file.filename;
+                trade.save();
+                res.render("trade", {owner: req.user, info: trade, user: req.user});
+            });
         }
-        if (req.file.fieldName == 'tradeImage') {
-        }
+    } else if (req.body.tradeID) {
+        res.render('upload', {user: req.user, trade: req.body.tradeID});
     }
-})
+});
 
 router.get('/ping', function(req, res) {
     res.status(200).send("pong!");
@@ -281,7 +287,7 @@ router.post('/tradelist', function(req, res) {
     Trade.findById(req.body._id, function(err, trade) {
         console.log(trade._id);
         Account.findById(trade.userID, function (err, account) {
-            res.render("trade", {owner: account, info: trade});
+            res.render("trade", {owner: account, info: trade, user: req.user});
         });
     });
 });

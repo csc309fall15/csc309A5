@@ -6,7 +6,14 @@ block content
         h1
             a(href='/'): img(src='/images/logo.jpg')    
             <strong>A4 CRUD App</strong>
-    img(src='/images/default.jpg', height='100', width='100')             
+    if (owner._id.equals(user._id))
+        form(action='/upload', method='post')
+            button(name='tradeID', value=info._id) Change Trade Picture
+        br
+    if(info.pic)   
+        img(src='/images/' + info.pic, height='100', width='100') 
+    else
+        img(src='/images/default.jpg', height='100', width='100')             
     br
     br
     p Title: #{info.title}
