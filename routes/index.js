@@ -180,17 +180,17 @@ router.get('/edit', function(req, res) {
     res.render('edit', {user : req.user});
 });
 
-/*
+
 router.post('/rate', function(req, res) {
     Account.findById(req.user._id, function(err, account) {
-        var rating = req.getElementById("rating").value;
-        avgRating = (avgRating * numOfRatings + rating)/(numOfRatings + 1);
-        numOfRatings += 1;
+        var rating = req.body.rating;
+        account.avgRating = (account.avgRating * account.numOfRatings + +rating)/(account.numOfRatings + 1);
+        account.numOfRatings += 1;
         account.save();
     });
     res.redirect('/');
 });
-*/
+
 
 router.post('/edit', function(req, res) {
     Account.findById(req.user._id, function(err, account) {

@@ -29,12 +29,11 @@ block content
                 br
                 button(name='_id', value=val._id) View Trade
             br
-    p Leave #{user.displayname} a rating:
-    select(id='rating')
-        each i in [1, 2, 3, 4, 5]
-            option(value="#{i}") #{i}
-    br
-    form(action='/rate', method='post')
-        button(name='rate') Submit Rating
+    form(role='rate', action="/rate",method="post", style='max-width: 300px;')
+        p Leave #{user.displayname} a rating:
+            select(name='rating')
+                each i in [1, 2, 3, 4, 5]
+                    option(value="#{i}") #{i}
+        button(name='rate') Submit Rating       
     br
     a(href='/profiles') View All Profiles
