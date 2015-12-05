@@ -181,13 +181,6 @@ router.get('/maketrade', function(req, res) {
 });
 
 router.post('/maketrade', function(req, res) {
-    Trade.count({}, function(err, count){
-        if (count == 0){
-            var trade = new Trade();
-            trade.title = 'test';
-            Trade.remove();
-        }
-    });
     var trade = new Trade();
     trade.title = req.body.tradetitle;
     trade.desc = req.body.tradedesc;
@@ -196,7 +189,7 @@ router.post('/maketrade', function(req, res) {
     trade.userID = req.user._id;
     trade.date = Date.now();
     trade.beenReq = false;
-    trade.save();
+    trade.save(function (err) { if (err) return console.error(err); });
     res.redirect('/tradelist');
 });
 
