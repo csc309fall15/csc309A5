@@ -1,0 +1,36 @@
+extends layout
+
+block content
+  header(role='banner')
+    hgroup
+        h1
+            a(href='/'): img(src='/images/logo.jpg')    
+            <strong>A4 CRUD App</strong>
+  if (info)        
+  h1 Edit Trade
+  p.lead Change Trade Information 
+      form(role='form', action="/upload",method="post", enctype="multipart/form-data", style='max-width: 300px;')
+        lead Change Trade Image:
+        .form-group
+          input.form-control(type='file', name='tradeImage')
+      button.btn.btn-default(type='submit') Submit    
+      form(role='form', action="/admintrade", method="post", style='max-width: 300px;')
+        lead Change Title:    
+        .form-group
+          input.form-control(type='text', name="title", value=info.title)
+        lead Change Trade Item(s):    
+        .form-group
+          input.form-control(type='text', name="tradeitems", value=info.itemGive)
+        lead Change Item(s) Requested:  
+        .form-group
+          input.form-control(type='text', name="itemsreq", value=info.itemReq)
+        lead Change Description
+        .form-group
+          input.form-control(type='description', name="description", value=info.desc)
+        .form-group
+          lead Delete Trade
+          input.form-control(type="checkbox", name="delete", value="1") 
+        button.btn.btn-default(type='submit') Submit
+        &nbsp;
+        a(href='/admin')
+          button.btn.btn-primary(type="button") Cancel   

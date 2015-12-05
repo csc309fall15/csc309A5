@@ -108,6 +108,31 @@ router.post('/admin', function(req, res) {
     });
 });
 
+router.post('/admin2', function(req, res) {
+    Trade.findById(req.body._id, function(err, trade) {
+        console.log(trade._id);
+        res.render("admintrade", {info: trade, user : req.user});
+    });
+});
+
+router.get('/admintrade', function(req, res) {
+    res.render("admintrade", {info: trade, user : req.user});
+});
+
+router.post('/admintrade', function(req, res) {
+    Trade.findOne({title : req.body.title}, function(err, trade) {
+        trade.title = req.body.title;
+        trade.desc = req.body.description;
+        trade.itemGive = req.body.tradeitems;
+        trade.itemReq = req.body.itemsreq;
+        if (req.body.delete) {
+            Trade.find({_id : trade._id}).remove().exec();
+        }
+        trade.save();
+    });
+    res.redirect('/');
+})
+
 router.get('/account', function(req, res) {
     res.render("account", {info: account, user : req.user});
 });
