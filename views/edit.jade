@@ -28,8 +28,9 @@ block content
         .form-group
           input.form-control(type='password', name="newpassword2", placeholder="Enter new password again for verification!")
         button.btn.btn-default(type='submit') Submit
-        &nbsp;
         a(href='/')
           button.btn.btn-primary(type="button") Cancel
+        br
+        h4= info
   if (!user)
     Unauthorized

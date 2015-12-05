@@ -205,28 +205,20 @@ router.post('/edit', function(req, res) {
                 account.description = req.body.description;
             }
             if (req.body.newpassword != "" && req.body.newpassword == req.body.newpassword2) {
-              account.setPassword(req.body.newpassword);
+                account.setPassword(req.body.newpassword, function () {
+                    account.save();
+                });
+            }
 
+            if (req.body.newpassword != req.body.newpassword2) {
+              return res.render("edit", {info: "Sorry, passwords don't match."});
             }
 
             account.save();
         }
-    });
     res.redirect('/');
+    });
 });
-/*
-userModel.findByUsername(account.email).then(function(user){
-    if (user) {
-        user.setPassword(newPasswordString, function(){
-            user.save();
-            return res.status(200).json({msg: 'password reset successful'});
-        });
-    } else {
-        res.status(200).json({status: 0, msg: 'This user does not exist'});
-    }
-},function(err){
-    console.log(err)
-})*/
 
 router.get('/upload', function(req, res) {
     res.render('upload', {user : req.user});
