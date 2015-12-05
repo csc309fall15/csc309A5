@@ -19,7 +19,8 @@ block content
     br
     p Email: #{user.username}
     p Display Name: #{user.displayname}  
-    p Description: #{user.description} 
+    p Description: #{user.description}
+    p Rating: #{user.avgRating}
     h3 #{user.displayname}'s Trades
     ul
         each val in trades
@@ -28,5 +29,13 @@ block content
                 br
                 button(name='_id', value=val._id) View Trade
             br
-    a(href='/profiles') 
+    p Leave #{user.displayname} a rating:
+    select(id='rating')
+        each i in [1, 2, 3, 4, 5]
+            option(value="#{i}") #{i}
+    br
+    form(action='/rate', method='post')
+        button(name='rate') Submit Rating
+    br
+    a(href='/profiles')
         p View All Profiles

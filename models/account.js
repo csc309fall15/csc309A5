@@ -10,6 +10,8 @@ var Account = new Schema({
     sys: Boolean,
     super: Boolean,
     avatar: String,
+    numOfRatings: Number,
+    avgRating: Number,
     behavior: {
     	IP: String,
     	location: String,
