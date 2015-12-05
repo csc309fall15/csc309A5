@@ -6,19 +6,27 @@ block content
         h1
             a(href='/'): img(src='/images/logo.jpg')    
             <strong>A4 CRUD App</strong>
-        if(info)
-            if (!info.displayname)
-                h2 #{info.username}'s Profile
-            if (info.displayname)    
-                h2 #{info.displayname}'s Profile
-    if(info.avatar)   
-        a(href='/upload'): img(src='/images/' + info.avatar, height='100', width='100') 
+        if(user)
+            if (!user.displayname)
+                h2 #{user.username}'s Profile
+            if (user.displayname)    
+                h2 #{user.displayname}'s Profile
+    if(user.avatar)   
+        a(href='/upload'): img(src='/images/' + user.avatar, height='100', width='100') 
     else
         a(href='/upload'): img(src='/images/default.jpg', height='100', width='100')             
     br
     br
-    p Email: #{info.username}
-    p Display Name: #{info.displayname}  
-    p Description: #{info.description} 
+    p Email: #{user.username}
+    p Display Name: #{user.displayname}  
+    p Description: #{user.description} 
+    h3 #{user.displayname}'s Trades
+    ul
+        each val in trades
+            form(action='/tradelist', method='post')
+                span= val.title
+                br
+                button(name='_id', value=val._id) View Trade
+            br
     a(href='/profiles') 
-        p Back              
+        p View All Profiles

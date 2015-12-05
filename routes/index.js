@@ -12,7 +12,17 @@ var upload = multer({ dest: './public/images' });
 
 /* GET home page. */
 router.get('/', function(req, res) {
-    res.render("index", {user : req.user});
+    var tradeMap = {};
+    if (req.user) {
+        Trade.find({ userID: req.user._id }, function (err, trades) {
+            trades.forEach(function(trade) {
+                tradeMap[trade._id] = trade;
+            });
+            res.render("index", {user: req.user, trades: tradeMap});
+        });
+    } else {
+        res.render("index", {user: req.user, trades: tradeMap});
+    }
 });
 
 /* GET registration page */
@@ -65,7 +75,6 @@ router.get('/logout', function(req, res) {
 router.get('/profiles', function(req,res) {
     Account.find({ }, function (err, accounts) {
         var accountMap = {};
-
         accounts.forEach(function(account) {
             accountMap[account._id] = account;
         });
@@ -74,10 +83,14 @@ router.get('/profiles', function(req,res) {
 });
 
 router.post('/profiles', function(req, res) {
-    console.log(req.body._id);
     Account.findById(req.body._id, function(err, account) {
-        console.log(account._id);
-        res.render("profile", {info: account});
+        Trade.find({ userID: req.body._id }, function (err, trades) {
+            tradeMap = {};
+            trades.forEach(function(trade) {
+                tradeMap[trade._id] = trade;
+            });
+            res.render("profile", {user: account, trades: tradeMap});
+        });
     });
 })
 
@@ -156,7 +169,7 @@ router.post('/account', function(req, res) {
             account.sys = false;
         }
         if (req.body.delete){
-            Account.find({_id : account._id}).remove().exec();
+            Account.findById(account._id).remove().exec();
         }
         account.save();
     });
@@ -226,11 +239,10 @@ router.post('/maketrade', function(req, res) {
 router.get('/tradelist', function(req,res) {
     Trade.find({}, function (err, trades) {
         var tradeMap = {};
-
         trades.forEach(function(trade) {
             tradeMap[trade._id] = trade;
         });
-    res.render("tradelist", {user : req.user, trades: tradeMap});
+    res.render("tradelist", {user: req.user, trades: tradeMap});
     });
 });
 
@@ -238,7 +250,9 @@ router.post('/tradelist', function(req, res) {
     console.log(req.body._id);
     Trade.findById(req.body._id, function(err, trade) {
         console.log(trade._id);
-        res.render("trade", {info: trade});
+        Account.findById(trade.userID, function (err, account) {
+            res.render("trade", {owner: account, info: trade});
+        });
     });
 });
 

@@ -39,9 +39,17 @@ block content
     h3 
         a(href='/profiles') 
             p View All Users
-    h4
+    h3
         a(href='/maketrade')
-            p Make Trade
-    h5
+            p Create New Trade
+    h3
         a(href='/tradelist')
-            p View Trades
+            p View All Trades
+    h3 My Trades
+    ul
+        each val in trades
+            form(action='/tradelist', method='post')
+                span= val.title
+                br
+                button(name='_id', value=val._id) View Trade
+            br

@@ -15,7 +15,7 @@ block content
   ul
     each val in accounts
       form(action='/profiles', method='post')
-        lead #{val.username}, #{val.displayname}
+        span= val.username + ", " + val.displayname
         br
         button(name='_id', value=val._id) View Profile
       br

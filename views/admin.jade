@@ -15,7 +15,7 @@ block content
   ul
     each val in accounts
       form(action='/admin', method='post')
-        lead #{val.username}, #{val.displayname}
+        span= val.username + ", " + val.displayname
         br
         button(name='_id', value=val._id) Edit Account
       br
@@ -23,7 +23,7 @@ block content
   ul
     each val in trades
       form(action='admin2', method='post')
-        lead #{val.title}
+        span= val.title
         br
         button(name='_id', value=val._id) Edit Trade
       br

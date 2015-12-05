@@ -15,7 +15,7 @@ block content
   ul
     each val in trades
       form(action='/tradelist', method='post')
-        lead #{val.title}
+        span= val.title
         br
         button(name='_id', value=val._id) View Trade
       br
