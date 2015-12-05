@@ -58,10 +58,13 @@ router.get('/login', function(req, res) {
 
 router.post('/login', function(req, res) {
     Account.findOne({username : req.body.username}, function(err, account) {
-        if (account==null) {
+        // If an account can't be found cause it doesn't exist
+        if (account == null) {
+            console.log(err);
             return res.render("login", {info: "Sorry, email address not found."});
         }
-        if (err) {
+        // If an account exists but the password doesn't match
+        if (err == null) {
             return res.render("login", {info: "Password doesn't match."});
         }
         passport.authenticate('local')(req, res, function () {
