@@ -61,6 +61,9 @@ router.post('/login', function(req, res) {
         if (account==null) {
             return res.render("login", {info: "Sorry, email address not found."});
         }
+        if (err) {
+            return res.render("login", {info: "Password doesn't match."});
+        }
         passport.authenticate('local')(req, res, function () {
             res.redirect('/');
         });
@@ -216,7 +219,7 @@ router.post('/edit', function(req, res) {
 
             account.save();
         }
-    res.redirect('/');
+        res.redirect('/');
     });
 });
 
