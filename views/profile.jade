@@ -21,6 +21,13 @@ block content
     p Display Name: #{user.displayname}  
     p Description: #{user.description}
     p Rating: #{user.avgRating}
+    form(role='rate', action="/rate",method="post", style='max-width: 300px;')
+        p Leave #{user.displayname} a rating:
+            select(name='rating')
+                each i in [1, 2, 3, 4, 5]
+                    option(value="#{i}") #{i}
+        button(name='rate') Submit Rating       
+    br
     h3 #{user.displayname}'s Trades
     ul
         each val in trades
@@ -29,11 +36,4 @@ block content
                 br
                 button(name='_id', value=val._id) View Trade
             br
-    form(role='rate', action="/rate",method="post", style='max-width: 300px;')
-        p Leave #{user.displayname} a rating:
-            select(name='rating')
-                each i in [1, 2, 3, 4, 5]
-                    option(value="#{i}") #{i}
-        button(name='rate') Submit Rating       
-    br
     a(href='/profiles') View All Profiles
