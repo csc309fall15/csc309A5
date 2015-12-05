@@ -207,12 +207,12 @@ router.post('/upload', upload.single('displayImage' || 'tradeImage'), function(r
             Account.findById(req.user._id, function(err, account) {
                 account.avatar = req.file.filename;
                 account.save();
+                res.redirect('/');     
             }); 
         }
         if (req.file.fieldName == 'tradeImage') {
         }         
     }
-    res.redirect('/');     
 })
 
 router.get('/ping', function(req, res) {

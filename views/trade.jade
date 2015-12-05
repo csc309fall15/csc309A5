@@ -6,7 +6,7 @@ block content
         h1
             a(href='/'): img(src='/images/logo.jpg')    
             <strong>A4 CRUD App</strong>
-    a(href='/upload'): img(src='/images/default.jpg', height='100', width='100')             
+    img(src='/images/default.jpg', height='100', width='100')             
     br
     br
     p Title: #{info.title}
@@ -18,5 +18,4 @@ block content
     form(action='/profiles', method='post')
         button(name='_id', value=owner._id) View #{owner.displayname}'s Profile
     br
-    a(href='/tradelist') 
-        p View All Trades             
+    a(href='/tradelist') View All Trades             

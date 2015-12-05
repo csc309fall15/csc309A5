@@ -12,9 +12,9 @@ block content
             if (user.displayname)    
                 h2 #{user.displayname}'s Profile
     if(user.avatar)   
-        a(href='/upload'): img(src='/images/' + user.avatar, height='100', width='100') 
+        img(src='/images/' + user.avatar, height='100', width='100') 
     else
-        a(href='/upload'): img(src='/images/default.jpg', height='100', width='100')             
+        img(src='/images/default.jpg', height='100', width='100')             
     br
     br
     p Email: #{user.username}
@@ -28,5 +28,4 @@ block content
                 br
                 button(name='_id', value=val._id) View Trade
             br
-    a(href='/profiles') 
-        p View All Profiles
+    a(href='/profiles') View All Profiles
