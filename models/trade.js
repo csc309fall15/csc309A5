@@ -8,7 +8,8 @@ var Trade = new Schema({
     itemGive: String,
     userID: String,
     date: String,
-    beenReq: Boolean
+    beenReq: Boolean,
+    pic: String
 });
 
 module.exports = mongoose.model('Trade', Trade);

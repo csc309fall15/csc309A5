@@ -19,8 +19,13 @@ block content
         br
         button(name='_id', value=val._id) Edit Account
       br
+  h3 Trades
+  ul
+    each val in trades
+      form(action='admin2', method='post')
+        lead #{val.title}
+        br
+        button(name='_id', value=val._id) Edit Trade
+      br
   br
-  p= info      
-
-
-
+  p= info

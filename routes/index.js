@@ -24,7 +24,7 @@ router.get('/register', function(req, res) {
 router.post('/register', function(req, res) {
     // First user automatically super admin
     var first = false;
-    Account.count({}, function(err, count){
+    Account.count({}, function(err, count) {
         if (count == 0){
             first = true;
         }
@@ -62,8 +62,8 @@ router.get('/logout', function(req, res) {
     res.redirect('/');
 });
 
-router.get('/profiles', function(req,res){
-    Account.find({ }, function (err, accounts){
+router.get('/profiles', function(req,res) {
+    Account.find({ }, function (err, accounts) {
         var accountMap = {};
 
         accounts.forEach(function(account) {
@@ -73,9 +73,9 @@ router.get('/profiles', function(req,res){
     });
 });
 
-router.post('/profiles', function(req, res){
+router.post('/profiles', function(req, res) {
     console.log(req.body._id);
-    Account.findById(req.body._id, function(err, account){
+    Account.findById(req.body._id, function(err, account) {
         console.log(account._id);
         res.render("profile", {info: account});
     });
@@ -86,18 +86,23 @@ router.get('/profile', function(req, res) {
 });
 
 router.get('/admin', function(req, res) {
-    Account.find({ }, function (err, accounts){
+    Account.find({ }, function (err, accounts) {
         var accountMap = {};
-
         accounts.forEach(function(account) {
             accountMap[account._id] = account;
         });
-        res.render('admin', {accounts: accountMap});
+        Trade.find({}, function (err, trades) {
+            var tradeMap = {};
+            trades.forEach(function(trade) {
+                tradeMap[trade._id] = trade;
+            });
+            res.render('admin', {accounts: accountMap, trades: tradeMap});
+        });
     });
 });
 
-router.post('/admin', function(req, res){
-    Account.findById(req.body._id, function(err, account){
+router.post('/admin', function(req, res) {
+    Account.findById(req.body._id, function(err, account) {
         console.log(account._id);
         res.render("account", {info: account, user : req.user});
     });
@@ -107,7 +112,7 @@ router.get('/account', function(req, res) {
     res.render("account", {info: account, user : req.user});
 });
 
-router.post('/account', function(req, res){
+router.post('/account', function(req, res) {
     console.log(req.body);
     Account.findOne({username : req.body.username}, function(err, account) {
         account.username = req.body.username;
@@ -157,22 +162,22 @@ router.get('/upload', function(req, res) {
     res.render('upload', {user : req.user});
 });
 
-router.post('/upload', upload.single('displayImage' || 'tradeImage'), function(req, res){
+router.post('/upload', upload.single('displayImage' || 'tradeImage'), function(req, res) {
     console.log(req.file);
     if(req.file != undefined) {
-        if (req.file.fieldname == 'displayImage'){
+        if (req.file.fieldname == 'displayImage') {
             Account.findById(req.user._id, function(err, account) {
                 account.avatar = req.file.filename;
                 account.save();
             }); 
         }
-        if (req.file.fieldName == 'tradeImage'){
+        if (req.file.fieldName == 'tradeImage') {
         }         
     }
     res.redirect('/');     
 })
 
-router.get('/ping', function(req, res){
+router.get('/ping', function(req, res) {
     res.status(200).send("pong!");
 });
 
@@ -193,8 +198,8 @@ router.post('/maketrade', function(req, res) {
     res.redirect('/tradelist');
 });
 
-router.get('/tradelist', function(req,res){
-    Trade.find({ }, function (err, trades){
+router.get('/tradelist', function(req,res) {
+    Trade.find({}, function (err, trades) {
         var tradeMap = {};
 
         trades.forEach(function(trade) {
@@ -204,9 +209,9 @@ router.get('/tradelist', function(req,res){
     });
 });
 
-router.post('/tradelist', function(req, res){
+router.post('/tradelist', function(req, res) {
     console.log(req.body._id);
-    Trade.findById(req.body._id, function(err, trade){
+    Trade.findById(req.body._id, function(err, trade) {
         console.log(trade._id);
         res.render("trade", {info: trade});
     });
