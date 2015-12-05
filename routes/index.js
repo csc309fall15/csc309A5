@@ -194,19 +194,36 @@ router.post('/rate', function(req, res) {
 
 router.post('/edit', function(req, res) {
     Account.findById(req.user._id, function(err, account) {
-        if (req.body.username != ""){
-            account.username = req.body.username;}
-        if (req.body.displayname != ""){
-            account.displayname = req.body.displayname;}
-        if (req.body.description != ""){
-            account.description = req.body.description;}
-        if (req.body.currentpassword != "" && req.body.currentpassword == account.password){
-          account.password = req.body.newpassword;}
-        account.save();
+        if (req.body.username != "") {
+            account.username = req.body.username;
+        }
+        if (req.body.displayname != "") {
+            account.displayname = req.body.displayname;
+        }
+        if (req.body.description != "") {
+            account.description = req.body.description;
+        }
+        if (req.body.currentpassword != "" && req.body.currentpassword == account.password) {
+          account.password = req.body.newpassword;
+        }
 
+        account.save();
     });
     res.redirect('/');
 });
+/*
+userModel.findByUsername(account.email).then(function(user){
+    if (user) {
+        user.setPassword(newPasswordString, function(){
+            user.save();
+            return res.status(200).json({msg: 'password reset successful'});
+        });
+    } else {
+        res.status(200).json({status: 0, msg: 'This user does not exist'});
+    }
+},function(err){
+    console.log(err)
+})*/
 
 router.get('/upload', function(req, res) {
     res.render('upload', {user : req.user});
@@ -219,11 +236,11 @@ router.post('/upload', upload.single('displayImage' || 'tradeImage'), function(r
             Account.findById(req.user._id, function(err, account) {
                 account.avatar = req.file.filename;
                 account.save();
-                res.redirect('/');     
-            }); 
+                res.redirect('/');
+            });
         }
         if (req.file.fieldName == 'tradeImage') {
-        }         
+        }
     }
 })
 
