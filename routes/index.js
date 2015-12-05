@@ -194,20 +194,23 @@ router.post('/rate', function(req, res) {
 
 router.post('/edit', function(req, res) {
     Account.findById(req.user._id, function(err, account) {
-        if (req.body.username != "") {
-            account.username = req.body.username;
-        }
-        if (req.body.displayname != "") {
-            account.displayname = req.body.displayname;
-        }
-        if (req.body.description != "") {
-            account.description = req.body.description;
-        }
-        if (req.body.currentpassword != "" && req.body.currentpassword == account.password) {
-          account.password = req.body.newpassword;
-        }
+        if (account) {
+            if (req.body.username != "") {
+                account.username = req.body.username;
+            }
+            if (req.body.displayname != "") {
+                account.displayname = req.body.displayname;
+            }
+            if (req.body.description != "") {
+                account.description = req.body.description;
+            }
+            if (req.body.newpassword != "" && req.body.newpassword == req.body.newpassword2) {
+              account.setPassword(req.body.newpassword);
 
-        account.save();
+            }
+
+            account.save();
+        }
     });
     res.redirect('/');
 });
