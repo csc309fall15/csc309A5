@@ -42,4 +42,10 @@ block content
                 br
                 button(name='_id', value=val._id) View Trade
             br
+    h4 #{user.displayname}'s Comments
+    ul
+        each comment in user.comments
+            p #{comment.comment}
+            p From #{comment.user}
+            br
     a(href='/profiles') View All Profiles
