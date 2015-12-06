@@ -10,7 +10,7 @@ var app = express();
 var multer  = require('multer');
 var upload = multer({ dest: './public/images' });
 
-// GET home page. 
+// GET home page.
 router.get('/', function(req, res) {
     var tradeMap = {};
     if (req.user) {
@@ -25,12 +25,12 @@ router.get('/', function(req, res) {
     }
 });
 
-// GET registration page 
+// GET registration page
 router.get('/register', function(req, res) {
     res.render('register', { });
 });
 
-// Register new Use
+// Register new user page
 router.post('/register', function(req, res) {
     // First user automatically super admin
     var first = false;
@@ -44,24 +44,25 @@ router.post('/register', function(req, res) {
             if (err) {
                 return res.render("register", {info: "Sorry. That email already exists. Try again."});
             }
-            passport.authenticate('local')(req, res, function () {
+            passport.authenticate('local')(req, res, function () {  // Send logged in user to home page
                 res.redirect('/');
             });
         });
     });
 });
 
-// GET login pag
+// GET login page
 router.get('/login', function(req, res) {
     res.render('login', { user : req.user });
 });
 
+// Login page
 router.post('/login', passport.authenticate('local', {
     successRedirect: '/',
     failureRedirect: '/login'
   })
 );
-
+// GET logout commands
 router.get('/logout', function(req, res) {
     var name = req.username;
     req.logout();
@@ -101,8 +102,8 @@ router.get('/edit', function(req, res) {
 // Edit Profile information, including password options
 router.post('/edit', function(req, res) {
     Account.findById(req.user._id, function(err, account) {
-        if (account) {
-            if (req.body.username != "") {
+        if (account) {  // Check if an accoun is found
+            if (req.body.username != "") {  // Make sure username field isn't empty
                 account.username = req.body.username;
             }
             if (req.body.displayname != "") {
@@ -117,7 +118,7 @@ router.post('/edit', function(req, res) {
                 });
             }
 
-            if (req.body.newpassword != req.body.newpassword2) {
+            if (req.body.newpassword != req.body.newpassword2) {  // Passwords should match
               return res.render("edit", {info: "Sorry, passwords don't match.", user: account});
             }
 
@@ -178,7 +179,7 @@ router.post('/admin', function(req, res) {
     });
 });
 
-// Get admin control for editing trade information 
+// Get admin control for editing trade information
 router.post('/admin2', function(req, res) {
     if (!req.user || !req.user.sys) { return res.render('unauth'); }
     Trade.findById(req.body._id, function(err, trade) {
@@ -187,7 +188,7 @@ router.post('/admin2', function(req, res) {
     });
 });
 
-//
+// GET admin trade page
 router.get('/admintrade', function(req, res) {
     res.render("admintrade", {info: trade, user : req.user});
 });
@@ -208,7 +209,7 @@ router.post('/admintrade', function(req, res) {
     res.redirect('/');
 })
 
-//
+// GET account information page
 router.get('/account', function(req, res) {
     res.render("account", {info: account, user : req.user});
 });
@@ -364,6 +365,7 @@ router.post('/upload', upload.single('image'), function(req, res) {
     }
 });
 
+// GET page for test cases
 router.get('/ping', function(req, res) {
     res.status(200).send("pong!");
 });
