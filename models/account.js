@@ -12,11 +12,11 @@ var Account = new Schema({
     avatar: String,
     numOfRatings: Number,
     avgRating: Number,
-    comments: {
+    comments: [{
         user: String,
         date: String,
         comment: String
-    },
+    }],
     behavior: {
     	IP: String,
     	location: String,

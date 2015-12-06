@@ -128,6 +128,18 @@ router.post('/edit', function(req, res) {
     });
 });
 
+router.post('/comment', function(req, res) {
+    console.log(req.body.com);
+    Account.findById(req.user._id, function(err, account2) {
+        //account.comments.user = account2.displayname;
+        //account.comments.date = Date.now();
+        Account.update({_id:req.body.com},{'$push': { comments: {comment: req.body.comment, user : account2.displayname, date : '3'}}});
+        //account.comments.insert({comment : req.body.comment, user : account2.displayname, date : Date.now()});
+        //account.save();
+    });
+    res.redirect('/');
+});
+/*
 // Leave a Comment for a User
 router.post('/comment', function(req, res) {
     Account.findById(req.body.com, function(err, account) {
@@ -140,6 +152,7 @@ router.post('/comment', function(req, res) {
     });
     res.redirect('/');
 });
+*/
 
 // Rate a User
 router.post('/rate', function(req, res) {
