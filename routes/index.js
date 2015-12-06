@@ -64,9 +64,10 @@ router.post('/login', function(req, res) {
             return res.render("login", {info: "Sorry, email address not found."});
         }
         // If an account exists but the password doesn't match
-        if (err == null) {
-            return res.render("login", {info: "Password doesn't match."});
-        }
+        //if (err == null) {
+        //    return res.render("login", {info: "Password doesn't match."});
+        //}
+
         passport.authenticate('local')(req, res, function () {
             res.redirect('/');
         });
