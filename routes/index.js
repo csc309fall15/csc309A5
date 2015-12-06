@@ -81,7 +81,7 @@ router.get('/profiles', function(req,res) {
     });
 });
 
-// POST List of All a User's Trades on their Profile
+// POST with a user ID to get that user's public profile
 router.post('/profiles', function(req, res) {
     Account.findById(req.body._id, function(err, account) {
         Trade.find({ userID: req.body._id }, function (err, trades) {
@@ -94,7 +94,7 @@ router.post('/profiles', function(req, res) {
     });
 })
 
-// GET Profiling Editing Options
+// GET Profile Editing Options
 router.get('/edit', function(req, res) {
     res.render('edit', {user : req.user});
 });
@@ -278,7 +278,7 @@ router.get('/tradelist', function(req,res) {
     });
 });
 
-// Visit User who posted a given trade
+// POST with a trade ID to visit that trade's page
 router.post('/tradelist', function(req, res) {
     console.log(req.body._id);
     Trade.findById(req.body._id, function(err, trade) {
