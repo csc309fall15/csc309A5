@@ -4,37 +4,42 @@ block content
   header(role='banner')
     hgroup
         h1
-            a(href='/'): img(src='/images/logo.jpg')    
+            a(href='/'): img(src='/images/logo.jpg')
             <strong>A4 CRUD App</strong>
-  if (info)        
+  if (info)
   h1 Edit Profile
-  p.lead Change Profile Information 
+  p.lead Change Profile Information
       form(role='form', action="/upload",method="post", enctype="multipart/form-data", style='max-width: 300px;')
         span Change Profile Image:
         .form-group
           input.form-control(type='file', name='image')
           input(type='hidden', name='accID', value=info._id)
-        button.btn.btn-default(type='submit') Submit    
+        button.btn.btn-default(type='submit') Submit
       form(role='form', action="/account",method="post", style='max-width: 300px;')
-        span Change Email:    
+        span Change Email:
         .form-group
           input.form-control(type='text', name="username", value=info.username)
-        span Change Display Name:    
+        span Change Display Name:
         .form-group
           input.form-control(type='text', name="displayname", value=info.displayname)
-        span Change Profile Description:  
+        span Change Profile Description:
         .form-group
           input.form-control(type='description', name="description", value=info.description)
+        span Change Password:
+        .form-group
+          input.form-control(type='password', name="newpassword", placeholder="Enter new password!")
+        .form-group
+          input.form-control(type='password', name="newpassword2", placeholder="Enter new password again for verification!")
         .form-group
           span Admin
           input.form-control(type="checkbox", name="sys", value="1", checked= info.sys || info.super)
-        if(user.super)         
+        if(user.super)
           .form-group
             span Super Admin
             input.form-control(type="checkbox", name="super", value="1", checked= info.super)
         .form-group
           span Delete User
-          input.form-control(type="checkbox", name="delete", value="1") 
+          input.form-control(type="checkbox", name="delete", value="1")
         button.btn.btn-default(type='submit') Submit
         a(href='/admin')
-          button.btn.btn-primary(type="button") Cancel   
+          button.btn.btn-primary(type="button") Cancel

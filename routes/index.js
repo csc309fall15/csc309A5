@@ -176,6 +176,13 @@ router.post('/account', function(req, res) {
         account.username = req.body.username;
         account.displayname = req.body.displayname;
         account.description = req.body.description;
+
+        if (req.body.newpassword != "" && req.body.newpassword == req.body.newpassword2) {
+            account.setPassword(req.body.newpassword, function () {
+                account.save();
+            });
+        }
+
         if(req.body.super){
             account.super = true;
             account.sys = true;
