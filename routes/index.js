@@ -134,6 +134,16 @@ router.post('/admin', function(req, res) {
     });
 });
 
+/*
+router.post('/comment', function(req, res) {
+    Account.findById(req.user._id, function(err, account) {
+        account.comment.desc
+        account.save();
+    });
+    res.redirect('/');
+})
+*/
+
 router.post('/admin2', function(req, res) {
     Trade.findById(req.body._id, function(err, trade) {
         console.log(trade._id);

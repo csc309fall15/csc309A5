@@ -28,6 +28,12 @@ block content
                     option(value="#{i}") #{i}
         button(name='rate') Submit Rating       
     br
+    form(role='comment', action='comment',method='post')
+        lead Leave #{user.displayname} a comment:
+            .form-group
+                input.form-control(type='text', name="comment")
+        button.btn.btn-default(type='submit') Submit Comment
+    br
     h3 #{user.displayname}'s Trades
     ul
         each val in trades
