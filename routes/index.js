@@ -60,13 +60,19 @@ router.post('/login', function(req, res) {
     Account.findOne({username : req.body.username}, function(err, account) {
         // If an account can't be found cause it doesn't exist
         if (account == null) {
-            console.log(err);
-            return res.render("login", {info: "Sorry, email address not found."});
+            res.render("login", {info: "Sorry, email address not found."});
         }
         // If an account exists but the password doesn't match
-        //if (err == null) {
-        //    return res.render("login", {info: "Password doesn't match."});
-        //}
+        account.comparePassword(req.body.password, function(err, match) {
+            if (err) {
+                res.render("login", {info: "Passwords don't match."});
+            }
+            /*if (match) {
+                passport.authenticate('local')(req, res, function () {
+                    res.redirect('/');
+                });
+            }*/
+        });
 
         passport.authenticate('local')(req, res, function () {
             res.redirect('/');
