@@ -1,0 +1,25 @@
+extends layout
+
+block content
+  if (user)
+    header(role='banner')
+      hgroup
+        h1
+            a(href='/'): img(src='/images/logo.jpg')
+            <strong>A4 CRUD App</strong>
+    .container
+      h1 Search for Trades
+      form(role='form', action="/search", method="post", style='max-width: 300px;')
+        lead I am looking for:
+        .form-group
+          input.form-control(type='text', name="want")
+        button.btn.btn-default(type='submit') Submit
+    if(trades)  
+      h3 My Trades
+      ul
+        each val in trades
+          form(action='/search', method='post')
+            span= val.title
+            br
+            button(name='_id', value=val._id) View Trade
+        br
