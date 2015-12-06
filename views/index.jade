@@ -18,12 +18,19 @@ block content
     a(href="/login") Login
     br
     a(href="/register") Register
-  if (user)
-    a(href="/logout") Logout
-    br   
-    if (user.sys)
-        a(href='/admin') Admin Tools 
+  if (user)    
+    ul#nav
+      li
+        a(href="/profiles") Users
+      li
+        a(href="/maketrade") New Trade
+      li
+        a(href="/tradelist") All Trades
+      li
+        a(href="/logout") Logout  
     br
+    br
+    br 
     br
     if(user.avatar)   
         a(href='/upload'): img(src='/images/' + user.avatar, height='100', width='100') 
@@ -36,17 +43,15 @@ block content
     p Description: #{user.description}
     a(href="/edit") Edit Profile
     br
-    h3 
-        a(href='/profiles') View All Users
-    h3
-        a(href='/maketrade') Create New Trade
-    h3
-        a(href='/tradelist') View All Trades
+    if (user.sys)
+      a(href='/admin') Admin Tools 
+    br 
+    br
     h3 My Trades
     ul
         each val in trades
             form(action='/tradelist', method='post')
                 span= val.title
                 br
-                button(name='_id', value=val._id) View Trade
+                button.btn.btn-sm(name='_id', value=val._id) View Trade
             br

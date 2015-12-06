@@ -17,7 +17,7 @@ block content
       form(action='/admin', method='post')
         span= val.username + ", " + val.displayname
         br
-        button(name='_id', value=val._id) Edit Account
+        button.btn.btn-sm(name='_id', value=val._id) Edit Account
       br
   h3 Trades
   ul
@@ -25,7 +25,7 @@ block content
       form(action='admin2', method='post')
         span= val.title
         br
-        button(name='_id', value=val._id) Edit Trade
+        button.btn.btn-sm(name='_id', value=val._id) Edit Trade
       br
   br
   p= info

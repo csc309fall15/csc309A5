@@ -1,8 +1,38 @@
 body {
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  width: 500px;
+  border: 3px solid #777;
 }
 
 a {
   color: #00B7FF;
 }
+
+#nav{
+	font: 17px "Lucida Grande", Helvetica, Arial, sans-serif;
+	list-style:none;
+	/* Clear floats */
+	width:100%;
+	position:absolute;
+	z-index:5;	
+}
+
+#nav li{
+	float:left;
+	position:relative;
+	
+}
+#nav a{
+	display:block;
+	padding:5px;
+	color:#333;
+	background:#fff;
+	text-decoration: none;
+}
+#nav a:hover{
+	color:#fff;
+	background:#00B7FF;
+	text-decoration: none;
+}
+
