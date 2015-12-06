@@ -56,34 +56,17 @@ router.get('/login', function(req, res) {
     res.render('login', { user : req.user });
 });
 
-router.post('/login', function(req, res) {
-    Account.findOne({username : req.body.username}, function(err, account) {
-        // If an account can't be found cause it doesn't exist
-        if (account == null) {
-            res.render("login", {info: "Sorry, email address not found."});
-        }
-        // If an account exists but the password doesn't match
-        /*
-        account.comparePassword(req.body.password, function(err, match) {
-            if (err) {
-                res.render("login", {info: "Passwords don't match."});
-            }
-            /*if (match) {
-                passport.authenticate('local')(req, res, function () {
-                    res.redirect('/');
-                });
-            }
-        });
-        */
-        passport.authenticate('local')(req, res, function () {
-            res.redirect('/');
-        });
-    });
-});
+router.post('/login', passport.authenticate('local', {
+    successRedirect: '/',
+    failureRedirect: '/login'
+  })
+);
 
 router.get('/logout', function(req, res) {
+    var name = req.username;
     req.logout();
     res.redirect('/');
+    req.session.notice = "You have successfully logged out of " + name + "!";
 });
 
 router.get('/profiles', function(req,res) {
