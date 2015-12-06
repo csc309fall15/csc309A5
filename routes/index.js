@@ -108,11 +108,14 @@ router.post('/profiles', function(req, res) {
     });
 })
 
+/*
 router.get('/profile', function(req, res) {
     res.render("profile", {user : req.user, info : account});
 });
+*/
 
 router.get('/admin', function(req, res) {
+    if (!req.user || !req.user.sys) { return res.render('unauth'); }
     Account.find({ }, function (err, accounts) {
         var accountMap = {};
         accounts.forEach(function(account) {
@@ -129,6 +132,7 @@ router.get('/admin', function(req, res) {
 });
 
 router.post('/admin', function(req, res) {
+    if (!req.user || !req.user.sys) { return res.render('unauth'); }
     Account.findById(req.body._id, function(err, account) {
         console.log(account._id);
         res.render("account", {info: account, user : req.user});
@@ -148,17 +152,21 @@ router.post('/comment', function(req, res) {
 });
 
 router.post('/admin2', function(req, res) {
+    if (!req.user || !req.user.sys) { return res.render('unauth'); }
     Trade.findById(req.body._id, function(err, trade) {
         console.log(trade._id);
         res.render("admintrade", {info: trade, user : req.user});
     });
 });
 
+/*
 router.get('/admintrade', function(req, res) {
     res.render("admintrade", {info: trade, user : req.user});
 });
+*/
 
 router.post('/admintrade', function(req, res) {
+    if (!req.user || !req.user.sys) { return res.render('unauth'); }
     Trade.findOne({title : req.body.title}, function(err, trade) {
         trade.title = req.body.title;
         trade.desc = req.body.description;
@@ -172,11 +180,14 @@ router.post('/admintrade', function(req, res) {
     res.redirect('/');
 })
 
+/*
 router.get('/account', function(req, res) {
     res.render("account", {info: account, user : req.user});
 });
+*/
 
 router.post('/account', function(req, res) {
+    if (!req.user || !req.user.sys) { return res.render('unauth'); }
     console.log(req.body);
     Account.findOne({username : req.body.username}, function(err, account) {
         account.username = req.body.username;
@@ -245,28 +256,56 @@ router.post('/edit', function(req, res) {
     });
 });
 
+// GET upload page for profile images
 router.get('/upload', function(req, res) {
     res.render('upload', {user : req.user});
 });
 
+// To get the upload page for trade images, POST to /upload with a tradeID and no image
 router.post('/upload', upload.single('image'), function(req, res) {
+    if (!req.user) { return res.render('unauth'); }
     console.log(req.file);
     if(req.file != undefined) {
         if (!req.body.tradeID) {
-            Account.findById(req.user._id, function(err, account) {
-                account.avatar = req.file.filename;
-                account.save();
-                res.redirect('/');
-            });
+            if (!req.body.accID) {
+                Account.findById(req.user._id, function(err, account) {
+                    account.avatar = req.file.filename;
+                    account.save();
+                    res.redirect('/');
+                });
+            } else {
+                if (!req.user.sys) { return res.render('unauth'); }
+                Account.findById(req.body.accID, function(err, account) {
+                    account.avatar = req.file.filename;
+                    account.save();
+                    Trade.find({ userID: account._id }, function (err, trades) {
+                        tradeMap = {};
+                        trades.forEach(function(trade) {
+                            tradeMap[trade._id] = trade;
+                        });
+                        res.render("profile", {user: account, trades: tradeMap});
+                    });
+                });
+            }
         } else {
             Trade.findById(req.body.tradeID, function (err, trade) {
+                if (!req.user._id.equals(trade.userID) && !req.user.sys) { return res.render('unauth'); }
                 trade.pic = req.file.filename;
                 trade.save();
-                res.render("trade", {owner: req.user, info: trade, user: req.user});
+                if (!req.user._id.equals(trade.userID)) {
+                    Account.findById(trade.userID, function(err, account) {
+                        res.render("trade", {owner: account, info: trade, user: req.user});
+                    });
+                } else {
+                    res.render("trade", {owner: req.user, info: trade, user: req.user});
+                }
             });
         }
     } else if (req.body.tradeID) {
-        res.render('upload', {user: req.user, trade: req.body.tradeID});
+        Trade.findById(req.body.tradeID, function (err, trade) {
+            if (!req.user._id.equals(trade.userID)) { return res.render('unauth'); }
+            res.render('upload', {user: req.user, trade: req.body.tradeID});
+        });
     }
 });
 

@@ -12,8 +12,9 @@ block content
       form(role='form', action="/upload",method="post", enctype="multipart/form-data", style='max-width: 300px;')
         span Change Profile Image:
         .form-group
-          input.form-control(type='file', name='displayImage')
-      button.btn.btn-default(type='submit') Submit    
+          input.form-control(type='file', name='image')
+          input(type='hidden', name='accID', value=info._id)
+        button.btn.btn-default(type='submit') Submit    
       form(role='form', action="/account",method="post", style='max-width: 300px;')
         span Change Email:    
         .form-group

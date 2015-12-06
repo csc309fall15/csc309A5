@@ -10,25 +10,26 @@ block content
   h1 Edit Trade
   p.lead Change Trade Information 
       form(role='form', action="/upload",method="post", enctype="multipart/form-data", style='max-width: 300px;')
-        lead Change Trade Image:
+        span Change Trade Image:
         .form-group
-          input.form-control(type='file', name='tradeImage')
-      button.btn.btn-default(type='submit') Submit    
+          input.form-control(type='file', name='image')
+          input(type='hidden', name='tradeID', value=info._id)
+        button.btn.btn-default(type='submit') Submit    
       form(role='form', action="/admintrade", method="post", style='max-width: 300px;')
-        lead Change Title:    
+        span Change Title:    
         .form-group
           input.form-control(type='text', name="title", value=info.title)
-        lead Change Trade Item(s):    
+        span Change Trade Item(s):    
         .form-group
           input.form-control(type='text', name="tradeitems", value=info.itemGive)
-        lead Change Item(s) Requested:  
+        span Change Item(s) Requested:  
         .form-group
           input.form-control(type='text', name="itemsreq", value=info.itemReq)
-        lead Change Description
+        span Change Description
         .form-group
           input.form-control(type='description', name="description", value=info.desc)
         .form-group
-          lead Delete Trade
+          span Delete Trade
           input.form-control(type="checkbox", name="delete", value="1") 
         button.btn.btn-default(type='submit') Submit
         a(href='/admin')
