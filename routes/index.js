@@ -287,8 +287,7 @@ router.post('/maketrade', function(req, res) {
     trade.userID = req.user._id;
     trade.date = Date.now();
     trade.beenReq = false;
-    trade.save(function (err) { if (err) return console.error(err); });
-    res.redirect('/tradelist');
+    trade.save(function (err) { res.render("trade", {owner: req.user, info: trade, user: req.user}); });
 });
 
 router.get('/tradelist', function(req,res) {
