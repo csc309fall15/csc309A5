@@ -203,9 +203,8 @@ router.get('/edit', function(req, res) {
     res.render('edit', {user : req.user});
 });
 
-
 router.post('/rate', function(req, res) {
-    Account.findById(req.user._id, function(err, account) {
+    Account.findById(req.body.rate, function(err, account) {
         var rating = req.body.rating;
         account.avgRating = (account.avgRating * account.numOfRatings + +rating)/(account.numOfRatings + 1);
         account.numOfRatings += 1;
