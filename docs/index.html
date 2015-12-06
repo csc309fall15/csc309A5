@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>index.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>index.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> express = <span class="hljs-built_in">require</span>(<span class="hljs-string">'express'</span>);
+<span class="hljs-keyword">var</span> passport = <span class="hljs-built_in">require</span>(<span class="hljs-string">'passport'</span>);
+<span class="hljs-keyword">var</span> Account = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../models/account'</span>);
+<span class="hljs-keyword">var</span> Trade = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../models/trade'</span>);
+<span class="hljs-keyword">var</span> mongoose = <span class="hljs-built_in">require</span>(<span class="hljs-string">'mongoose'</span>);
+<span class="hljs-keyword">var</span> router = express.Router();
+
+<span class="hljs-keyword">var</span> app = express();
+
+<span class="hljs-keyword">var</span> multer  = <span class="hljs-built_in">require</span>(<span class="hljs-string">'multer'</span>);
+<span class="hljs-keyword">var</span> upload = multer({ dest: <span class="hljs-string">'./public/images'</span> });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>GET home page. </p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>router.get(<span class="hljs-string">'/'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res</span>) </span>{
+    <span class="hljs-keyword">var</span> tradeMap = {};
+    <span class="hljs-keyword">if</span> (req.user) {
+        Trade.find({ userID: req.user._id }, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">err, trades</span>) </span>{
+            trades.forEach(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">trade</span>) </span>{
+                tradeMap[trade._id] = trade;
+            });
+            res.render(<span class="hljs-string">"index"</span>, {user: req.user, trades: tradeMap});
+        });
+    } <span class="hljs-keyword">else</span> {
+        res.render(<span class="hljs-string">"index"</span>, {user: req.user, trades: tradeMap});
+    }
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>GET registration page </p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>router.get(<span class="hljs-string">'/register'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res</span>) </span>{
+    res.render(<span class="hljs-string">'register'</span>, { });
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>Register new Use</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>router.post(<span class="hljs-string">'/register'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res</span>) </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>First user automatically super admin</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> first = <span class="hljs-literal">false</span>;
+    Account.count({}, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, count</span>) </span>{
+        <span class="hljs-keyword">if</span> (count == <span class="hljs-number">0</span>){
+            first = <span class="hljs-literal">true</span>;
+        }
+        Account.register(<span class="hljs-keyword">new</span> Account({ displayname : req.body.displayname, username : req.body.username, sys : first, <span class="hljs-keyword">super</span> : first, avgRating : <span class="hljs-number">3</span>, numOfRatings : <span class="hljs-number">1</span>}),
+            req.body.password, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, account</span>) </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>Email address uniquely identifies a user</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            <span class="hljs-keyword">if</span> (err) {
+                <span class="hljs-keyword">return</span> res.render(<span class="hljs-string">"register"</span>, {info: <span class="hljs-string">"Sorry. That email already exists. Try again."</span>});
+            }
+            passport.authenticate(<span class="hljs-string">'local'</span>)(req, res, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+                res.redirect(<span class="hljs-string">'/'</span>);
+            });
+        });
+    });
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>GET login pag</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>router.get(<span class="hljs-string">'/login'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res</span>) </span>{
+    res.render(<span class="hljs-string">'login'</span>, { user : req.user });
+});
+
+router.post(<span class="hljs-string">'/login'</span>, passport.authenticate(<span class="hljs-string">'local'</span>, {
+    successRedirect: <span class="hljs-string">'/'</span>,
+    failureRedirect: <span class="hljs-string">'/login'</span>
+  })
+);
+
+router.get(<span class="hljs-string">'/logout'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res</span>) </span>{
+    <span class="hljs-keyword">var</span> name = req.username;
+    req.logout();
+    res.redirect(<span class="hljs-string">'/'</span>);
+    req.session.notice = <span class="hljs-string">"You have successfully logged out of "</span> + name + <span class="hljs-string">"!"</span>;
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>GET List of All Accounts</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>router.get(<span class="hljs-string">'/profiles'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req,res</span>) </span>{
+    Account.find({ }, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">err, accounts</span>) </span>{
+        <span class="hljs-keyword">var</span> accountMap = {};
+        accounts.forEach(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">account</span>) </span>{
+            accountMap[account._id] = account;
+        });
+    res.render(<span class="hljs-string">"profiles"</span>, {user : req.user, accounts: accountMap});
+    });
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>POST List of All a User’s Trades on their Profile</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>router.post(<span class="hljs-string">'/profiles'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res</span>) </span>{
+    Account.findById(req.body._id, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, account</span>) </span>{
+        Trade.find({ userID: req.body._id }, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">err, trades</span>) </span>{
+            tradeMap = {};
+            trades.forEach(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">trade</span>) </span>{
+                tradeMap[trade._id] = trade;
+            });
+            res.render(<span class="hljs-string">"profile"</span>, {user: account, trades: tradeMap});
+        });
+    });
+})</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>GET Profiling Editing Options</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>router.get(<span class="hljs-string">'/edit'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res</span>) </span>{
+    res.render(<span class="hljs-string">'edit'</span>, {user : req.user});
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>Edit Profile information, including password options</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>router.post(<span class="hljs-string">'/edit'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res</span>) </span>{
+    Account.findById(req.user._id, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, account</span>) </span>{
+        <span class="hljs-keyword">if</span> (account) {
+            <span class="hljs-keyword">if</span> (req.body.username != <span class="hljs-string">""</span>) {
+                account.username = req.body.username;
+            }
+            <span class="hljs-keyword">if</span> (req.body.displayname != <span class="hljs-string">""</span>) {
+                account.displayname = req.body.displayname;
+            }
+            <span class="hljs-keyword">if</span> (req.body.description != <span class="hljs-string">""</span>) {
+                account.description = req.body.description;
+            }
+            <span class="hljs-keyword">if</span> (req.body.newpassword != <span class="hljs-string">""</span> &amp;&amp; req.body.newpassword == req.body.newpassword2) {
+                account.setPassword(req.body.newpassword, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+                    account.save();
+                });
+            }
+
+            <span class="hljs-keyword">if</span> (req.body.newpassword != req.body.newpassword2) {
+              <span class="hljs-keyword">return</span> res.render(<span class="hljs-string">"edit"</span>, {info: <span class="hljs-string">"Sorry, passwords don't match."</span>, user: account});
+            }
+
+            account.save();
+        }
+        res.redirect(<span class="hljs-string">'/'</span>);
+    });
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p>Leave a Comment for a User</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>router.post(<span class="hljs-string">'/comment'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res</span>) </span>{
+    Account.findById(req.body.com, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, account</span>) </span>{
+        account.comments.comment = req.body.comment;
+        Account.findById(req.user._id, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, account2</span>) </span>{
+            account.comments.user = account2.displayname;
+            account.comments.date = <span class="hljs-built_in">Date</span>.now();
+            account.save();
+        });
+    });
+    res.redirect(<span class="hljs-string">'/'</span>);
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>Rate a User</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>router.post(<span class="hljs-string">'/rate'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res</span>) </span>{
+    Account.findById(req.body.rate, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, account</span>) </span>{
+        <span class="hljs-keyword">var</span> rating = req.body.rating;
+        account.avgRating = (account.avgRating * account.numOfRatings + +rating)/(account.numOfRatings + <span class="hljs-number">1</span>);
+        account.numOfRatings += <span class="hljs-number">1</span>;
+        account.save();
+    });
+    res.redirect(<span class="hljs-string">'/'</span>);
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p>Summary of accounts and trades for admin</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>router.get(<span class="hljs-string">'/admin'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res</span>) </span>{
+    <span class="hljs-keyword">if</span> (!req.user || !req.user.sys) { <span class="hljs-keyword">return</span> res.render(<span class="hljs-string">'unauth'</span>); }
+    Account.find({ }, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">err, accounts</span>) </span>{
+        <span class="hljs-keyword">var</span> accountMap = {};
+        accounts.forEach(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">account</span>) </span>{
+            accountMap[account._id] = account;
+        });
+        Trade.find({}, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">err, trades</span>) </span>{
+            <span class="hljs-keyword">var</span> tradeMap = {};
+            trades.forEach(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">trade</span>) </span>{
+                tradeMap[trade._id] = trade;
+            });
+            res.render(<span class="hljs-string">'admin'</span>, {accounts: accountMap, trades: tradeMap});
+        });
+    });
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <p>Get admin control for editing account information</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>router.post(<span class="hljs-string">'/admin'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res</span>) </span>{
+    <span class="hljs-keyword">if</span> (!req.user || !req.user.sys) { <span class="hljs-keyword">return</span> res.render(<span class="hljs-string">'unauth'</span>); }
+    Account.findById(req.body._id, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, account</span>) </span>{
+        <span class="hljs-built_in">console</span>.log(account._id);
+        res.render(<span class="hljs-string">"account"</span>, {info: account, user : req.user});
+    });
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <p>Get admin control for editing trade information </p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>router.post(<span class="hljs-string">'/admin2'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res</span>) </span>{
+    <span class="hljs-keyword">if</span> (!req.user || !req.user.sys) { <span class="hljs-keyword">return</span> res.render(<span class="hljs-string">'unauth'</span>); }
+    Trade.findById(req.body._id, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, trade</span>) </span>{
+        <span class="hljs-built_in">console</span>.log(trade._id);
+        res.render(<span class="hljs-string">"admintrade"</span>, {info: trade, user : req.user});
+    });
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>router.get(<span class="hljs-string">'/admintrade'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res</span>) </span>{
+    res.render(<span class="hljs-string">"admintrade"</span>, {info: trade, user : req.user});
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <p>Allow admin to edit trade information</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>router.post(<span class="hljs-string">'/admintrade'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res</span>) </span>{
+    <span class="hljs-keyword">if</span> (!req.user || !req.user.sys) { <span class="hljs-keyword">return</span> res.render(<span class="hljs-string">'unauth'</span>); }
+    Trade.findOne({title : req.body.title}, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, trade</span>) </span>{
+        trade.title = req.body.title;
+        trade.desc = req.body.description;
+        trade.itemGive = req.body.tradeitems;
+        trade.itemReq = req.body.itemsreq;
+        <span class="hljs-keyword">if</span> (req.body.delete) {
+            Trade.find({_id : trade._id}).remove().exec();
+        }
+        trade.save();
+    });
+    res.redirect(<span class="hljs-string">'/'</span>);
+})</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>router.get(<span class="hljs-string">'/account'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res</span>) </span>{
+    res.render(<span class="hljs-string">"account"</span>, {info: account, user : req.user});
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-20">&#182;</a>
+              </div>
+              <p>Allow admin to edit account information</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>router.post(<span class="hljs-string">'/account'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res</span>) </span>{
+    <span class="hljs-keyword">if</span> (!req.user || !req.user.sys) { <span class="hljs-keyword">return</span> res.render(<span class="hljs-string">'unauth'</span>); }
+    <span class="hljs-built_in">console</span>.log(req.body);
+    Account.findOne({username : req.body.username}, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, account</span>) </span>{
+        account.username = req.body.username;
+        account.displayname = req.body.displayname;
+        account.description = req.body.description;
+
+        <span class="hljs-keyword">if</span> (req.body.newpassword != <span class="hljs-string">""</span> &amp;&amp; req.body.newpassword == req.body.newpassword2) {
+            account.setPassword(req.body.newpassword, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+                account.save();
+            });
+        }
+
+        <span class="hljs-keyword">if</span>(req.body.super){
+            account.super = <span class="hljs-literal">true</span>;
+            account.sys = <span class="hljs-literal">true</span>;
+        }
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(req.body.sys){
+            account.super = <span class="hljs-literal">false</span>;
+            account.sys = <span class="hljs-literal">true</span>;
+        }
+        <span class="hljs-keyword">else</span>{
+            account.super = <span class="hljs-literal">false</span>;
+            account.sys = <span class="hljs-literal">false</span>;
+        }
+        <span class="hljs-keyword">if</span> (req.body.delete){
+            Account.findById(account._id).remove().exec();
+        }
+        account.save();
+    });
+    res.redirect(<span class="hljs-string">'/admin'</span>);
+})</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-21">&#182;</a>
+              </div>
+              <p>GET maketrade page</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>router.get(<span class="hljs-string">'/maketrade'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res</span>) </span>{
+    res.render(<span class="hljs-string">'maketrade'</span>, {user: req.user});
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-22">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-22">&#182;</a>
+              </div>
+              <p>POST new trade</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>router.post(<span class="hljs-string">'/maketrade'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res</span>) </span>{
+    <span class="hljs-keyword">var</span> trade = <span class="hljs-keyword">new</span> Trade();
+    trade.title = req.body.tradetitle;
+    trade.desc = req.body.tradedesc;
+    trade.itemReq = req.body.tradereq;
+    trade.itemGive = req.body.tradeitems;
+    trade.userID = req.user._id;
+    trade.date = <span class="hljs-built_in">Date</span>.now();
+    trade.beenReq = <span class="hljs-literal">false</span>;
+    trade.save(<span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">err</span>) </span>{ res.render(<span class="hljs-string">"trade"</span>, {owner: req.user, info: trade, user: req.user}); });
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-23">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-23">&#182;</a>
+              </div>
+              <p>List all current trades</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>router.get(<span class="hljs-string">'/tradelist'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req,res</span>) </span>{
+    Trade.find({}, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">err, trades</span>) </span>{
+        <span class="hljs-keyword">var</span> tradeMap = {};
+        trades.forEach(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">trade</span>) </span>{
+            tradeMap[trade._id] = trade;
+        });
+    res.render(<span class="hljs-string">"tradelist"</span>, {user: req.user, trades: tradeMap});
+    });
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-24">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-24">&#182;</a>
+              </div>
+              <p>Visit User who posted a given trade</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>router.post(<span class="hljs-string">'/tradelist'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res</span>) </span>{
+    <span class="hljs-built_in">console</span>.log(req.body._id);
+    Trade.findById(req.body._id, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, trade</span>) </span>{
+        <span class="hljs-built_in">console</span>.log(trade._id);
+        Account.findById(trade.userID, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">err, account</span>) </span>{
+            res.render(<span class="hljs-string">"trade"</span>, {owner: account, info: trade, user: req.user});
+        });
+    });
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-25">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-25">&#182;</a>
+              </div>
+              <p>GET Search Page</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>router.get(<span class="hljs-string">'/search'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res</span>)</span>{
+    res.render(<span class="hljs-string">"search"</span>, {user : req.user})
+})</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-26">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-26">&#182;</a>
+              </div>
+              <p>Find trades matching search</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>router.post(<span class="hljs-string">'/search'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req,res</span>) </span>{
+    <span class="hljs-keyword">var</span> tradeMap = {};
+    Trade.find({}, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">err, trades</span>) </span>{
+        trades.forEach(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">trade</span>) </span>{
+            <span class="hljs-keyword">if</span> (trade.itemGive.indexOf(req.body.want) &gt; <span class="hljs-number">-1</span>) {
+                tradeMap[trade._id] = trade;
+            }
+        });
+        res.render(<span class="hljs-string">"results"</span>, {user: req.user, trades: tradeMap});
+    });
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-27">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-27">&#182;</a>
+              </div>
+              <p>GET search results</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>router.get(<span class="hljs-string">'/results'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req,res</span>)</span>{
+    res.render(<span class="hljs-string">"results"</span>, {user: req.user})
+})</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-28">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-28">&#182;</a>
+              </div>
+              <p>GET upload page for profile images</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>router.get(<span class="hljs-string">'/upload'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res</span>) </span>{
+    res.render(<span class="hljs-string">'upload'</span>, {user : req.user});
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-29">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-29">&#182;</a>
+              </div>
+              <p>To get the upload page for trade images, POST to /upload with a tradeID and no image</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>router.post(<span class="hljs-string">'/upload'</span>, upload.single(<span class="hljs-string">'image'</span>), <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res</span>) </span>{
+    <span class="hljs-keyword">if</span> (!req.user) { <span class="hljs-keyword">return</span> res.render(<span class="hljs-string">'unauth'</span>); }
+    <span class="hljs-built_in">console</span>.log(req.file);
+    <span class="hljs-keyword">if</span>(req.file != <span class="hljs-literal">undefined</span>) {
+        <span class="hljs-keyword">if</span> (!req.body.tradeID) {
+            <span class="hljs-keyword">if</span> (!req.body.accID) {
+                Account.findById(req.user._id, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, account</span>) </span>{
+                    account.avatar = req.file.filename;
+                    account.save();
+                    res.redirect(<span class="hljs-string">'/'</span>);
+                });
+            } <span class="hljs-keyword">else</span> {
+                <span class="hljs-keyword">if</span> (!req.user.sys) { <span class="hljs-keyword">return</span> res.render(<span class="hljs-string">'unauth'</span>); }
+                Account.findById(req.body.accID, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, account</span>) </span>{
+                    account.avatar = req.file.filename;
+                    account.save();
+                    Trade.find({ userID: account._id }, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">err, trades</span>) </span>{
+                        tradeMap = {};
+                        trades.forEach(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">trade</span>) </span>{
+                            tradeMap[trade._id] = trade;
+                        });
+                        res.render(<span class="hljs-string">"profile"</span>, {user: account, trades: tradeMap});
+                    });
+                });
+            }
+        } <span class="hljs-keyword">else</span> {
+            Trade.findById(req.body.tradeID, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">err, trade</span>) </span>{
+                <span class="hljs-keyword">if</span> (!req.user._id.equals(trade.userID) &amp;&amp; !req.user.sys) { <span class="hljs-keyword">return</span> res.render(<span class="hljs-string">'unauth'</span>); }
+                trade.pic = req.file.filename;
+                trade.save();
+                <span class="hljs-keyword">if</span> (!req.user._id.equals(trade.userID)) {
+                    Account.findById(trade.userID, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, account</span>) </span>{
+                        res.render(<span class="hljs-string">"trade"</span>, {owner: account, info: trade, user: req.user});
+                    });
+                } <span class="hljs-keyword">else</span> {
+                    res.render(<span class="hljs-string">"trade"</span>, {owner: req.user, info: trade, user: req.user});
+                }
+            });
+        }
+    } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (req.body.tradeID) {
+        Trade.findById(req.body.tradeID, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">err, trade</span>) </span>{
+            <span class="hljs-keyword">if</span> (!req.user._id.equals(trade.userID)) { <span class="hljs-keyword">return</span> res.render(<span class="hljs-string">'unauth'</span>); }
+            res.render(<span class="hljs-string">'upload'</span>, {user: req.user, trade: req.body.tradeID});
+        });
+    }
+});
+
+router.get(<span class="hljs-string">'/ping'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, res</span>) </span>{
+    res.status(<span class="hljs-number">200</span>).send(<span class="hljs-string">"pong!"</span>);
+});
+
+<span class="hljs-built_in">module</span>.exports = router;</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>
