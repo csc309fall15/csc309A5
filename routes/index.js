@@ -30,7 +30,7 @@ router.get('/register', function(req, res) {
     res.render('register', { });
 });
 
-// Register new Use
+// Register new User
 router.post('/register', function(req, res) {
     // First user automatically super admin
     var first = false;
@@ -51,7 +51,7 @@ router.post('/register', function(req, res) {
     });
 });
 
-// GET login pag
+// GET login page
 router.get('/login', function(req, res) {
     res.render('login', { user : req.user });
 });
@@ -80,7 +80,7 @@ router.get('/profiles', function(req,res) {
     });
 });
 
-// POST List of All a User's Trades on their Profile
+// POST with a user ID to get that user's public profile
 router.post('/profiles', function(req, res) {
     Account.findById(req.body._id, function(err, account) {
         Trade.find({ userID: req.body._id }, function (err, trades) {
@@ -93,7 +93,7 @@ router.post('/profiles', function(req, res) {
     });
 })
 
-// GET Profiling Editing Options
+// GET Profile Editing Options
 router.get('/edit', function(req, res) {
     res.render('edit', {user : req.user});
 });
@@ -187,11 +187,6 @@ router.post('/admin2', function(req, res) {
     });
 });
 
-//
-router.get('/admintrade', function(req, res) {
-    res.render("admintrade", {info: trade, user : req.user});
-});
-
 // Allow admin to edit trade information
 router.post('/admintrade', function(req, res) {
     if (!req.user || !req.user.sys) { return res.render('unauth'); }
@@ -207,11 +202,6 @@ router.post('/admintrade', function(req, res) {
     });
     res.redirect('/');
 })
-
-//
-router.get('/account', function(req, res) {
-    res.render("account", {info: account, user : req.user});
-});
 
 // Allow admin to edit account information
 router.post('/account', function(req, res) {
@@ -277,7 +267,7 @@ router.get('/tradelist', function(req,res) {
     });
 });
 
-// Visit User who posted a given trade
+// POST with a trade ID to visit that trade's page
 router.post('/tradelist', function(req, res) {
     console.log(req.body._id);
     Trade.findById(req.body._id, function(err, trade) {
