@@ -9,6 +9,8 @@ block content
   h2 Results
   ul
     each val in trades
+      if(val.beenReq)
+      <strong>Good Match:</strong>
       form(action='/tradelist', method='post')
         span= val.title
         br

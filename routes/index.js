@@ -294,13 +294,24 @@ router.get('/search', function(req, res){
     res.render("search", {user : req.user})
 })
 
-// Find trades matching search
+// Find trades matching search and suggests best match
 router.post('/search', function(req,res) {
     var tradeMap = {};
     Trade.find({}, function (err, trades) {
         trades.forEach(function(trade) {
-            if (trade.itemGive.indexOf(req.body.want) > -1) {
+            if (req.body.want != "" && trade.itemGive.indexOf(req.body.want) > -1) {
                 tradeMap[trade._id] = trade;
+                if(req.body.have != "" && trade.itemReq.indexOf(req.body.have) > -1){
+                    console.log("match!");
+                    trade.beenReq = true;
+                }
+            }
+            if (req.body.have != "" && trade.itemReq.indexOf(req.body.have) > -1){
+                tradeMap[trade._id] = trade;
+                if(req.body.want != "" && trade.itemGive.indexOf(req.body.want) > -1){
+                    console.log("match2!");
+                    trade.beenReq = true;
+                }
             }
         });
         res.render("results", {user: req.user, trades: tradeMap});
