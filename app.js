@@ -13,8 +13,14 @@ var LocalStrategy = require('passport-local').Strategy;
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
+// Denial-of-Service (dos) Prevention, not including distributed attacks
+var Ddos = require('ddos')
+var ddos = new Ddos;
+
 var app = express();
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(ddos.express);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
