@@ -1,12 +1,17 @@
 doctype html
 html
   head
-    title= title
+    title TradePizza - A trading site as ubiquitous as pizza
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
     link(href='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css', rel='stylesheet', media='screen')
     link(rel='stylesheet', href='/stylesheets/style.css')
   
-  body   
+  body
+  header(role='banner')
+    hgroup
+      h1
+        a(href='/'): img(src='/images/logo.jpg')    
+        <strong>TradePizza</strong>
   block content
 
 

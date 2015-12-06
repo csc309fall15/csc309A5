@@ -338,6 +338,7 @@ router.get('/results', function(req,res){
 
 // GET upload page for profile images
 router.get('/upload', function(req, res) {
+    if (!req.user) { return res.render('unauth'); }
     res.render('upload', {user : req.user});
 });
 

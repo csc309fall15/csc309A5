@@ -1,25 +1,19 @@
 extends layout
 
 block content
-  if (user)
-    header(role='banner')
-      hgroup
-        h1
-            a(href='/'): img(src='/images/logo.jpg')
-            <strong>A4 CRUD App</strong>
-    .container
-      if (trade)
-        h1 Upload Trade Picture       
-        form(role='form', action="/upload",method="post", enctype="multipart/form-data", style='max-width: 300px;')
-          .form-group
-            input.form-control(type='file', name='image')
-            input(type='hidden', name='tradeID', value=trade)
-          br
-          button.btn.btn-default(type='submit') Submit
-      else
-        h1 Upload Profile Picture       
-        form(role='form', action="/upload",method="post", enctype="multipart/form-data", style='max-width: 300px;')
-          .form-group
-            input.form-control(type='file', name='image')
-          br
-          button.btn.btn-default(type='submit') Submit
+  .container
+    if (trade)
+      h1 Upload Trade Picture       
+      form(role='form', action="/upload",method="post", enctype="multipart/form-data", style='max-width: 300px;')
+        .form-group
+          input.form-control(type='file', name='image')
+          input(type='hidden', name='tradeID', value=trade)
+        br
+        button.btn.btn-default(type='submit') Submit
+    else
+      h1 Upload Profile Picture       
+      form(role='form', action="/upload",method="post", enctype="multipart/form-data", style='max-width: 300px;')
+        .form-group
+          input.form-control(type='file', name='image')
+        br
+        button.btn.btn-default(type='submit') Submit

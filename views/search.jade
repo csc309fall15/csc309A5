@@ -1,19 +1,14 @@
 extends layout
 
 block content
-  header(role='banner')
-    hgroup
-        h1
-            a(href='/'): img(src='/images/logo.jpg')    
-            <strong>A4 CRUD App</strong>
-    .container
-      h1 Search for Trades
-      form(role='form', action="/search", method="post", style='max-width: 300px;')
-        p.lead Item I want:
-        .form-group
-          input.form-control(type='text', name="want")
-        p.lead Item I have:
-        .form-group
-          input.form-control(type='text', name="have")
-        button.btn.btn-default(type='submit') Submit
+  .container
+    h1 Search for Trades
+    form(role='form', action="/search", method="post", style='max-width: 300px;')
+      p.lead Item I want:
+      .form-group
+        input.form-control(type='text', name="want")
+      p.lead Item I have:
+      .form-group
+        input.form-control(type='text', name="have")
+      button.btn.btn-default(type='submit') Submit
 

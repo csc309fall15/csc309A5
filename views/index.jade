@@ -1,20 +1,15 @@
 extends layout
 
 block content
-  header(role='banner')
-    hgroup
-        h1
-            a(href='/'): img(src='/images/logo.jpg')    
-            <strong>A4 CRUD App</strong>
-        if(user)
-            br 
-            a(href="/logout") Logout
-            if (!user.displayname)
-                h2 Welcome 
-                    a(href='/edit') #{user.username}!
-            if (user.displayname)    
-                h2 Welcome 
-                    a(href='/edit') #{user.displayname}!              
+  if(user)
+    br 
+    a(href="/logout") Logout
+    if (!user.displayname)
+      h2 Welcome 
+        a(href='/edit') #{user.username}!
+    if (user.displayname)    
+      h2 Welcome 
+        a(href='/edit') #{user.displayname}!              
   br    
   if (!user)
     a(href="/login") Login

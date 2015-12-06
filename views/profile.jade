@@ -1,24 +1,19 @@
 extends layout
 
 block content
-  header(role='banner')
-    hgroup
-        h1
-            a(href='/'): img(src='/images/logo.jpg')    
-            <strong>A4 CRUD App</strong>
-        if(user)
-            if (!user.displayname)
-                h2 #{user.username}'s Profile
-            if (user.displayname)    
-                h2 #{user.displayname}'s Profile
-    if(user.avatar)   
-        img(src='/images/' + user.avatar, height='100', width='100') 
+    if(user)
+      if (!user.displayname)
+        h2 #{user.username}'s Profile
+      if (user.displayname)    
+        h2 #{user.displayname}'s Profile
+    if(user.avatar)
+      img(src='/images/' + user.avatar, height='100', width='100')
     else
-        img(src='/images/default.jpg', height='100', width='100')             
+      img(src='/images/default.jpg', height='100', width='100')
     br
     br
     p Email: #{user.username}
-    p Display Name: #{user.displayname}  
+    p Display Name: #{user.displayname}
     p Description: #{user.description}
     p Rating: #{user.avgRating}
     form(role='rate', action="/rate",method="post", style='max-width: 300px;')
@@ -26,7 +21,7 @@ block content
             select(name='rating')
                 each i in [1, 2, 3, 4, 5]
                     option(value="#{i}") #{i}
-        button(name='rate', value='#{user._id}') Submit Rating       
+        button(name='rate', value='#{user._id}') Submit Rating
     br
     form(role='comment', action='comment',method='post')
         lead Leave #{user.displayname} a comment:
@@ -42,10 +37,11 @@ block content
                 br
                 button(name='_id', value=val._id) View Trade
             br
-    h4 #{user.displayname}'s Comments
-    ul
-        each comment in user.comments
-            p #{comment.comment}
-            p From #{comment.user}
-            br
+    if (user.comments[0])
+      h4 #{user.displayname}'s Comments
+      ul
+          each comment in user.comments
+              p #{comment.comment}
+              p From #{comment.user}
+              br
     a(href='/profiles') View All Profiles

@@ -1,11 +1,6 @@
 extends layout
 
 block content
-  header(role='banner')
-    hgroup
-      h1
-        a(href='/'): img(src='/images/logo.jpg')    
-        <strong>A4 CRUD App</strong>
   .container
     h2 Trade Form
     form#formSubmitTrade(name="submittrade",method="post",action="/maketrade")
