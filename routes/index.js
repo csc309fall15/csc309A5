@@ -10,7 +10,7 @@ var app = express();
 var multer  = require('multer');
 var upload = multer({ dest: './public/images' });
 
-/* GET home page. */
+// GET home page. 
 router.get('/', function(req, res) {
     var tradeMap = {};
     if (req.user) {
@@ -25,12 +25,12 @@ router.get('/', function(req, res) {
     }
 });
 
-/* GET registration page */
+// GET registration page 
 router.get('/register', function(req, res) {
     res.render('register', { });
 });
 
-/* Reister new User*/
+// Register new Use
 router.post('/register', function(req, res) {
     // First user automatically super admin
     var first = false;
@@ -51,7 +51,7 @@ router.post('/register', function(req, res) {
     });
 });
 
-/* GET login page*/
+// GET login pag
 router.get('/login', function(req, res) {
     res.render('login', { user : req.user });
 });
@@ -69,6 +69,7 @@ router.get('/logout', function(req, res) {
     req.session.notice = "You have successfully logged out of " + name + "!";
 });
 
+// GET List of All Accounts
 router.get('/profiles', function(req,res) {
     Account.find({ }, function (err, accounts) {
         var accountMap = {};
@@ -79,6 +80,7 @@ router.get('/profiles', function(req,res) {
     });
 });
 
+// POST List of All a User's Trades on their Profile
 router.post('/profiles', function(req, res) {
     Account.findById(req.body._id, function(err, account) {
         Trade.find({ userID: req.body._id }, function (err, trades) {
@@ -91,12 +93,65 @@ router.post('/profiles', function(req, res) {
     });
 })
 
-/*
-router.get('/profile', function(req, res) {
-    res.render("profile", {user : req.user, info : account});
+// GET Profiling Editing Options
+router.get('/edit', function(req, res) {
+    res.render('edit', {user : req.user});
 });
-*/
 
+// Edit Profile information, including password options
+router.post('/edit', function(req, res) {
+    Account.findById(req.user._id, function(err, account) {
+        if (account) {
+            if (req.body.username != "") {
+                account.username = req.body.username;
+            }
+            if (req.body.displayname != "") {
+                account.displayname = req.body.displayname;
+            }
+            if (req.body.description != "") {
+                account.description = req.body.description;
+            }
+            if (req.body.newpassword != "" && req.body.newpassword == req.body.newpassword2) {
+                account.setPassword(req.body.newpassword, function () {
+                    account.save();
+                });
+            }
+
+            if (req.body.newpassword != req.body.newpassword2) {
+              return res.render("edit", {info: "Sorry, passwords don't match.", user: account});
+            }
+
+            account.save();
+        }
+        res.redirect('/');
+    });
+});
+
+// Leave a Comment for a User
+router.post('/comment', function(req, res) {
+    Account.findById(req.body.com, function(err, account) {
+        account.comments.comment = req.body.comment;
+        Account.findById(req.user._id, function(err, account2) {
+            account.comments.user = account2.displayname;
+            account.comments.date = Date.now();
+            account.save();
+        });
+    });
+    res.redirect('/');
+});
+
+// Rate a User
+router.post('/rate', function(req, res) {
+    Account.findById(req.body.rate, function(err, account) {
+        var rating = req.body.rating;
+        account.avgRating = (account.avgRating * account.numOfRatings + +rating)/(account.numOfRatings + 1);
+        account.numOfRatings += 1;
+        account.save();
+    });
+    res.redirect('/');
+});
+
+// Summary of accounts and trades for admin
 router.get('/admin', function(req, res) {
     if (!req.user || !req.user.sys) { return res.render('unauth'); }
     Account.find({ }, function (err, accounts) {
@@ -114,6 +169,7 @@ router.get('/admin', function(req, res) {
     });
 });
 
+// Get admin control for editing account information
 router.post('/admin', function(req, res) {
     if (!req.user || !req.user.sys) { return res.render('unauth'); }
     Account.findById(req.body._id, function(err, account) {
@@ -122,18 +178,7 @@ router.post('/admin', function(req, res) {
     });
 });
 
-router.post('/comment', function(req, res) {
-    Account.findById(req.body.com, function(err, account) {
-        account.comments.comment = req.body.comment;
-        Account.findById(req.user._id, function(err, account2) {
-            account.comments.user = account2.displayname;
-            account.comments.date = Date.now();
-            account.save();
-        });
-    });
-    res.redirect('/');
-});
-
+// Get admin control for editing trade information 
 router.post('/admin2', function(req, res) {
     if (!req.user || !req.user.sys) { return res.render('unauth'); }
     Trade.findById(req.body._id, function(err, trade) {
@@ -142,12 +187,12 @@ router.post('/admin2', function(req, res) {
     });
 });
 
-/*
+//
 router.get('/admintrade', function(req, res) {
     res.render("admintrade", {info: trade, user : req.user});
 });
-*/
 
+// Allow admin to edit trade information
 router.post('/admintrade', function(req, res) {
     if (!req.user || !req.user.sys) { return res.render('unauth'); }
     Trade.findOne({title : req.body.title}, function(err, trade) {
@@ -163,12 +208,12 @@ router.post('/admintrade', function(req, res) {
     res.redirect('/');
 })
 
-/*
+//
 router.get('/account', function(req, res) {
     res.render("account", {info: account, user : req.user});
 });
-*/
 
+// Allow admin to edit account information
 router.post('/account', function(req, res) {
     if (!req.user || !req.user.sys) { return res.render('unauth'); }
     console.log(req.body);
@@ -203,48 +248,68 @@ router.post('/account', function(req, res) {
     res.redirect('/admin');
 })
 
-router.get('/edit', function(req, res) {
-    res.render('edit', {user : req.user});
+// GET maketrade page
+router.get('/maketrade', function(req, res) {
+    res.render('maketrade', {user: req.user});
 });
 
-router.post('/rate', function(req, res) {
-    Account.findById(req.body.rate, function(err, account) {
-        var rating = req.body.rating;
-        account.avgRating = (account.avgRating * account.numOfRatings + +rating)/(account.numOfRatings + 1);
-        account.numOfRatings += 1;
-        account.save();
-    });
-    res.redirect('/');
+// POST new trade
+router.post('/maketrade', function(req, res) {
+    var trade = new Trade();
+    trade.title = req.body.tradetitle;
+    trade.desc = req.body.tradedesc;
+    trade.itemReq = req.body.tradereq;
+    trade.itemGive = req.body.tradeitems;
+    trade.userID = req.user._id;
+    trade.date = Date.now();
+    trade.beenReq = false;
+    trade.save(function (err) { res.render("trade", {owner: req.user, info: trade, user: req.user}); });
 });
 
-
-router.post('/edit', function(req, res) {
-    Account.findById(req.user._id, function(err, account) {
-        if (account) {
-            if (req.body.username != "") {
-                account.username = req.body.username;
-            }
-            if (req.body.displayname != "") {
-                account.displayname = req.body.displayname;
-            }
-            if (req.body.description != "") {
-                account.description = req.body.description;
-            }
-            if (req.body.newpassword != "" && req.body.newpassword == req.body.newpassword2) {
-                account.setPassword(req.body.newpassword, function () {
-                    account.save();
-                });
-            }
-
-            if (req.body.newpassword != req.body.newpassword2) {
-              return res.render("edit", {info: "Sorry, passwords don't match.", user: account});
-            }
-
-            account.save();
-        }
-        res.redirect('/');
+// List all current trades
+router.get('/tradelist', function(req,res) {
+    Trade.find({}, function (err, trades) {
+        var tradeMap = {};
+        trades.forEach(function(trade) {
+            tradeMap[trade._id] = trade;
+        });
+    res.render("tradelist", {user: req.user, trades: tradeMap});
     });
 });
+
+// Visit User who posted a given trade
+router.post('/tradelist', function(req, res) {
+    console.log(req.body._id);
+    Trade.findById(req.body._id, function(err, trade) {
+        console.log(trade._id);
+        Account.findById(trade.userID, function (err, account) {
+            res.render("trade", {owner: account, info: trade, user: req.user});
+        });
+    });
+});
+
+// GET Search Page
+router.get('/search', function(req, res){
+    res.render("search", {user : req.user})
+})
+
+// Find trades matching search
+router.post('/search', function(req,res) {
+    var tradeMap = {};
+    Trade.find({}, function (err, trades) {
+        trades.forEach(function(trade) {
+            if (trade.itemGive.indexOf(req.body.want) > -1) {
+                tradeMap[trade._id] = trade;
+            }
+        });
+        res.render("results", {user: req.user, trades: tradeMap});
+    });
+});
+
+// GET search results
+router.get('/results', function(req,res){
+    res.render("results", {user: req.user})
+})
 
 // GET upload page for profile images
 router.get('/upload', function(req, res) {
@@ -302,46 +367,5 @@ router.post('/upload', upload.single('image'), function(req, res) {
 router.get('/ping', function(req, res) {
     res.status(200).send("pong!");
 });
-
-router.get('/maketrade', function(req, res) {
-    res.render('maketrade', {user: req.user});
-});
-
-router.post('/maketrade', function(req, res) {
-    var trade = new Trade();
-    trade.title = req.body.tradetitle;
-    trade.desc = req.body.tradedesc;
-    trade.itemReq = req.body.tradereq;
-    trade.itemGive = req.body.tradeitems;
-    trade.userID = req.user._id;
-    trade.date = Date.now();
-    trade.beenReq = false;
-    trade.save(function (err) { res.render("trade", {owner: req.user, info: trade, user: req.user}); });
-});
-
-router.get('/tradelist', function(req,res) {
-    Trade.find({}, function (err, trades) {
-        var tradeMap = {};
-        trades.forEach(function(trade) {
-            tradeMap[trade._id] = trade;
-        });
-    res.render("tradelist", {user: req.user, trades: tradeMap});
-    });
-});
-
-router.post('/tradelist', function(req, res) {
-    console.log(req.body._id);
-    Trade.findById(req.body._id, function(err, trade) {
-        console.log(trade._id);
-        Account.findById(trade.userID, function (err, account) {
-            res.render("trade", {owner: account, info: trade, user: req.user});
-        });
-    });
-});
-
-router.get('/trade', function(req, res) {
-    res.render("trade", {user : req.user, info : trade});
-});
-
 
 module.exports = router;
