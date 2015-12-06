@@ -7,6 +7,8 @@ block content
             a(href='/'): img(src='/images/logo.jpg')    
             <strong>A4 CRUD App</strong>
         if(user)
+            br 
+            a(href="/logout") Logout
             if (!user.displayname)
                 h2 Welcome 
                     a(href='/edit') #{user.username}!
@@ -18,16 +20,16 @@ block content
     a(href="/login") Login
     br
     a(href="/register") Register
-  if (user)    
+  if (user)  
     ul#nav
-      li
-        a(href="/profiles") Users
       li
         a(href="/maketrade") New Trade
       li
+        a(href="/profiles") Users
+      li
         a(href="/tradelist") All Trades
       li
-        a(href="/logout") Logout  
+        a(href="/search") Search  
     br
     br
     br 
@@ -45,7 +47,6 @@ block content
     br
     if (user.sys)
       a(href='/admin') Admin Tools 
-    br 
     br
     h3 My Trades
     ul
