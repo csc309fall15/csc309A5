@@ -63,6 +63,7 @@ router.post('/login', function(req, res) {
             res.render("login", {info: "Sorry, email address not found."});
         }
         // If an account exists but the password doesn't match
+        /*
         account.comparePassword(req.body.password, function(err, match) {
             if (err) {
                 res.render("login", {info: "Passwords don't match."});
@@ -71,9 +72,9 @@ router.post('/login', function(req, res) {
                 passport.authenticate('local')(req, res, function () {
                     res.redirect('/');
                 });
-            }*/
+            }
         });
-
+        */
         passport.authenticate('local')(req, res, function () {
             res.redirect('/');
         });
@@ -134,15 +135,17 @@ router.post('/admin', function(req, res) {
     });
 });
 
-/*
 router.post('/comment', function(req, res) {
-    Account.findById(req.user._id, function(err, account) {
-        account.comment.desc
-        account.save();
+    Account.findById(req.body.com, function(err, account) {
+        account.comments.comment = req.body.comment;
+        Account.findById(req.user._id, function(err, account2) {
+            account.comments.user = account2.displayname;
+            account.comments.date = Date.now();
+            account.save();
+        });
     });
     res.redirect('/');
-})
-*/
+});
 
 router.post('/admin2', function(req, res) {
     Trade.findById(req.body._id, function(err, trade) {

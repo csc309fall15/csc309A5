@@ -32,7 +32,7 @@ block content
         lead Leave #{user.displayname} a comment:
             .form-group
                 input.form-control(type='text', name="comment")
-        button.btn.btn-default(type='submit') Submit Comment
+        button.btn.btn-default(type='submit', name='com', value='#{user._id}') Submit Comment
     br
     h3 #{user.displayname}'s Trades
     ul
