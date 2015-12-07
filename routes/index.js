@@ -11,7 +11,7 @@ var app = express();
 var multer  = require('multer');
 var upload = multer({ dest: './public/images' });
 
-var FACEBOOK_APP_ID = "--Insert app here if we had one--";
+var FACEBOOK_APP_ID = "--Don't have an app--";
 var FACEBOOK_APP_SECRET = "--Client secret strings--";
 
 
