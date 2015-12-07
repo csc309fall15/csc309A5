@@ -128,6 +128,17 @@ router.post('/edit', function(req, res) {
     });
 });
 
+// POST a comment to someone's trade
+router.post('/tradecomment', function(req, res) {
+    Trade.findById(req.body.com, function(err, trade) {
+        trade.comments.push({user: req.user.displayname, date: Date.now(), comment: req.body.comment});
+        trade.save();
+        Account.findById(trade.userID, function (err, account) {
+            res.render("trade", {owner: account, info: trade, user: req.user});
+        });
+    });
+});
+
 // POST a comment to someone's profile
 router.post('/comment', function(req, res) {
     Account.findById(req.body.com, function(err, account) {

@@ -9,7 +9,12 @@ var Trade = new Schema({
     userID: String,
     date: String,
     beenReq: Boolean,
-    pic: String
+    pic: String,
+    comments: [{
+        user: String,
+        date: String,
+        comment: String
+    }]
 });
 
 module.exports = mongoose.model('Trade', Trade);

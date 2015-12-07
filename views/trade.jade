@@ -20,4 +20,17 @@ block content
     form(action='/profiles', method='post')
         button(name='_id', value=owner._id) View #{owner.displayname}'s Profile
     br
-    a(href='/tradelist') View All Trades             
+    form(role='comment', action='/tradecomment',method='post')
+        lead Leave a comment:
+            .form-group
+                input.form-control(type='text', name="comment")
+        button.btn.btn-default(type='submit', name='com', value='#{info._id}') Submit Comment
+    br
+    if (info.comments[0])
+      h1 Comments
+      ul
+          each comment in info.comments
+              p #{comment.comment}
+              p From: #{comment.user}
+              br
+    a(href='/tradelist') View All Trades
